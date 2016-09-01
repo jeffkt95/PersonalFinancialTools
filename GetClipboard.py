@@ -6,6 +6,8 @@ def main():
 	fromClipboard = win32clipboard.GetClipboardData()
 	win32clipboard.CloseClipboard
 	print(fromClipboard)
+    
+    print("Yo yo!")
 	#Your mom
 
 if __name__ == "__main__":
