@@ -1,0 +1,95 @@
+Budget check
+
+8/15/2016 through 8/30/2016
+
+	Date	Account	Description	Memo	Amount	
+						
+	INCOME				4,697.86	
+	Salary, Jeff				4,697.86	
+	8/15/2016	Checking, NGCU	Applied Research		4,697.86	
+						
+	EXPENSES				-2,260.52	
+	Auto				-100.66	
+	Auto:Fuel				-100.66	
+	8/21/2016	Chase Credit Card	7-Eleven	van	-34.95	
+	8/22/2016	Chase Credit Card	BP	null	-30.40	
+	8/25/2016	Chase Credit Card	Exxon	gas on trip	-35.31	
+	Charity				-21.50	
+	8/27/2016	Checking, NGCU	Target	serena shower	-9.00	
+	8/25/2016	Chase Credit Card	Cost Plus World Market	carmen gift	-12.50	
+	Clothing				-372.58	
+	8/22/2016	Checking, NGCU	Target		-24.00	
+	8/15/2016	Chase Credit Card	Llr Field East	lularoe	-69.23	
+	8/17/2016	Chase Credit Card	Jos. A Bank Clothiers	Suit alterations	-12.78	
+	8/20/2016	Chase Credit Card	Rack Room Shoes	Returning shoes	33.00	
+	8/22/2016	Chase Credit Card	Target	Jeff shoes, belts	-133.41	
+	8/22/2016	Chase Credit Card	Rack Room Shoes	Jeff shoes for chruch	-79.85	
+	8/25/2016	Chase Credit Card	Cost Plus World Market	KT earrings	-8.78	
+	8/26/2016	Chase Credit Card	Target	Jeff shoes, belts, lightbulbs	90.50	
+	8/26/2016	Chase Credit Card	Dsw Designer Shoe Warehouse	a bunch of shoes for Megan to try on, will return	-148.89	
+	8/26/2016	Chase Credit Card	Old Navy		-99.39	
+	8/28/2016	Chase Credit Card	Rack Room Shoes	Returning shoes	47.91	
+	8/28/2016	Chase Credit Card	Rack Room Shoes		15.96	
+	8/28/2016	Chase Credit Card	Old Navy		16.38	
+	Dining				-139.89	
+	8/16/2016	Chase Credit Card	Burgerfi	Out with Katie	-19.36	
+	8/17/2016	Chase Credit Card	California Pizza Kitchen	first day of school lunch	-18.75	
+	8/19/2016	Chase Credit Card	Wawa	Wawa day	-2.87	
+	8/19/2016	Chase Credit Card	Sweet Frog		-20.47	
+	8/19/2016	Chase Credit Card	Uncle Maddio Pizza		-13.12	
+	8/19/2016	Chase Credit Card	Chick-Fil-A		-4.82	
+	8/23/2016	Chase Credit Card	Jersey Mikes	Jeff out with Shawn Hillis	-7.93	
+	8/23/2016	Chase Credit Card	Burger King	Chris	-3.18	
+	8/28/2016	Chase Credit Card	Little Caesars	kids	-13.31	
+	8/28/2016	Chase Credit Card	Uncle Maddio Pizza		-24.24	
+	8/30/2016	Chase Credit Card	Sweet Frog	Jeff with Megan	-11.84	
+	Education				-7.00	
+	8/19/2016	Chase Credit Card	Myp Avalon Middle	Megan sketch book	-7.00	
+	Groceries				-566.81	
+	8/22/2016	Checking, NGCU	Target		-65.69	
+	8/27/2016	Checking, NGCU	Target		-59.32	
+	8/16/2016	Chase Credit Card	Wal-Mart		-43.72	
+	8/19/2016	Chase Credit Card	Wal-Mart		-70.25	
+	8/22/2016	Chase Credit Card	Publix		-89.65	
+	8/25/2016	Chase Credit Card	Wal-mart		-2.76	
+	8/25/2016	Chase Credit Card	CVS PHARMACY		-19.51	
+	8/25/2016	Chase Credit Card	Wal-mart		-72.22	
+	8/26/2016	Chase Credit Card	Wal-mart		-90.46	
+	8/29/2016	Chase Credit Card	Walmart		-53.23	
+	Haircut				-16.00	
+	8/28/2016	Chase Credit Card	Avalon All Star Cuts	chris	-16.00	
+	Home				-121.41	
+	Other Home				-121.41	
+	8/21/2016	Chase Credit Card	Lowe's	spray paint	-9.87	
+	8/26/2016	Chase Credit Card	Marshalls	pillows, to return	-26.61	
+	8/27/2016	Chase Credit Card	TJ Maxx	pillows, jewelry holder,plant	-84.93	
+	Home Improvement				-606.36	
+	8/18/2016	Chase Credit Card	Lowe's	spray paint, paint supplies, kitchen paint	-123.78	
+	8/19/2016	Chase Credit Card	Lowe's	tile for backsplash	-361.38	
+	8/21/2016	Chase Credit Card	Lowe's		37.19	
+	8/27/2016	Chase Credit Card	Home Depot		-86.93	
+	8/28/2016	Chase Credit Card	The Home Depot	grout and back door mat	-41.23	
+	8/28/2016	Chase Credit Card	Lowe's	grout, stain, poplar wood, chip brushes	-56.82	
+	8/28/2016	Chase Credit Card	Lowe's		-18.48	
+	8/28/2016	Chase Credit Card	Lowe's	return stuff	45.07	
+	Makeup				-42.00	
+	8/27/2016	Checking, NGCU	Target		-42.00	
+	Medical				-150.98	
+	8/22/2016	Chase Credit Card	Florida Pediatric Assoc	Justine eye	-55.00	
+	8/23/2016	Chase Credit Card	Orlando Regional Healthca	medical bill that needed to be paid	-25.98	
+	8/25/2016	Chase Credit Card	CVS PHARMACY	chris epi-pin and inhaler	-60.00	
+	8/28/2016	Chase Credit Card	CVS PHARMACY	Jeff Lialda	-10.00	
+	Misc				-111.96	
+	8/25/2016	Checking, NGCU	Target	Halloween pic	-3.04	
+	8/20/2016	Chase Credit Card	Avalon Park Cleaners	Jeff suit cleaned	-15.71	
+	8/22/2016	Chase Credit Card	Target	broom, bins, lightbulbs	-43.00	
+	8/27/2016	Chase Credit Card	TJ Maxx	dry shampoo, stuff	-20.00	
+	8/27/2016	Chase Credit Card	Lowe's	white electrical tape, wodden buttons	-6.25	
+	8/28/2016	Chase Credit Card	Rack Room Shoes	Clothing	-15.96	
+	8/29/2016	Chase Credit Card	Just Blow It	tip	-8.00	
+	Recreation				-3.37	
+	8/28/2016	Chase Credit Card	Amazon.com	drum line movie	-3.37	
+						
+	OVERALL TOTAL				2,437.34	
+						
+						
