@@ -6,9 +6,6 @@ import oauth2client
 from oauth2client import client
 from oauth2client import tools
 
-#TODO: conside making a more generic class for connecting to any google spreadsheet. Then sub-class it for the Envelopes functionality.
-#Right now it's got no Envelopes specific stuff (except for the spreadsheet ID), so it would be easiest to do that FIRST, 
-#before you soil it.
 class GoogleSheetInterface:
     #This is the ID of my test spreadsheet right now. Note this ID is simply the URL of the spreadsheet.
     SCOPES = 'https://www.googleapis.com/auth/drive'
@@ -35,6 +32,8 @@ class GoogleSheetInterface:
         values = result.get('values', [])
         return values[0][0]
 
+    #Sets the value of a single cell
+    #Cell address is of the form "<column letter><row number>", e.g. "A5"
     def setCellValue(self, sheetName, cellAddress, value):
         fullCellAddress = sheetName + "!" + cellAddress
         myBody = {u'range': fullCellAddress, u'values': [[str(value)]], u'majorDimension': u'ROWS'}

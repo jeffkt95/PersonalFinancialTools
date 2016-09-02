@@ -20,7 +20,7 @@ def main():
     spreadsheetValue = envelopesSpreadsheet.getCellValue("Current period", "B3")
     print("Before change: " + str(spreadsheetValue))
 
-    envelopesSpreadsheet.setCellValue("Current period", "B3", 1050)
+    envelopesSpreadsheet.setCellValue("Current period", "B3", 1030)
     spreadsheetValue = envelopesSpreadsheet.getCellValue("Current period", "B3")
     print("After change: " + str(spreadsheetValue))
     
