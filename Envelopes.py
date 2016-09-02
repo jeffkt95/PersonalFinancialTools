@@ -16,7 +16,7 @@ class Envelopes:
         for envelope in self.envelopes:
             string = string + "    " + str(envelope) + "\n"
         
-        string = string + "TOTAL EXPENSES: " + self.totalExpenses
+        string = string + "TOTAL EXPENSES: " + str(self.totalExpenses)
         return string
         
     def getEnvelopesFromQuickenExport(self, qExport):
