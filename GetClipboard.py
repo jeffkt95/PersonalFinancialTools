@@ -1,5 +1,7 @@
 import win32clipboard
 
+#TODO: consider making this a class
+
 def main():
 	print ("Hello world.")
 	win32clipboard.OpenClipboard()
@@ -7,8 +9,5 @@ def main():
 	win32clipboard.CloseClipboard
 	print(fromClipboard)
 	
-	print("Yo yo!")
-	#Your mom
-
 if __name__ == "__main__":
 	main()
