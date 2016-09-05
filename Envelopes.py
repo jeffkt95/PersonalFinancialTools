@@ -2,6 +2,12 @@ from Envelope import Envelope
 import Utilities
 
 class Envelopes:
+    #This list has envelopes that are ignored. The only use case for the ignore list at this
+    #time is parent categories where the sub-categories are specific envelopes in the list.
+    #The quicken report we generate includes the parent categories and the sub-categories, so
+    #if we included both we'd be double-counting.
+    #Right now, the only parent/sub-categories we use are Auto (Auto:Fuel and Auto:Service)
+    envelopeIgnoreList = ["Auto"]
 
     def __init__(self):
         self.envelopes = []
@@ -74,5 +80,7 @@ class Envelopes:
                             else:
                                 envelopeName = envelopeName + " " + tokens[i]
                             
-                        self.addEnvelope(envelopeName, amountSpent)
+                        #First check that you're not supposed to ignore this envelope.
+                        if (not envelopeName in self.envelopeIgnoreList):
+                            self.addEnvelope(envelopeName, amountSpent)
     

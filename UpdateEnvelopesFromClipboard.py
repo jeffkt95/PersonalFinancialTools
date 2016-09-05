@@ -13,5 +13,7 @@ def main():
     envelopesSpreadsheet.connect()
     envelopesSpreadsheet.setEnvelopesInSpreadsheet(envelopes)
     
+    wait = input("PRESS ENTER TO CONTINUE.")
+    
 if __name__ == "__main__":
     main()
