@@ -3,6 +3,10 @@ A set of tools for my personal finances.
 
 I have a testing spreadsheet for development: "Lyons Envelope Testing"
 
-I may have to make changes to the spreadsheet to make this work. I'll log
-those changes in this text file so I can remember to make them in the real
-envelopes spreadsheet when I'm ready to deploy.
+It's now working for the real spreadsheet! I need more testing for weirdness that could happen with sub-envelopes.
+
+How about a UI? 
+
+How will you run it?
+    * Try one more time to run it from the spreadsheet.
+    * If that doesn't work, put a shortcut on the taskbar.

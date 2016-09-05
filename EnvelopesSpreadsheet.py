@@ -2,13 +2,14 @@ from GoogleSheetInterface import GoogleSheetInterface
 
 class EnvelopesSpreadsheet(GoogleSheetInterface):
     #This is the ID of my test spreadsheet right now. Note this ID is simply the URL of the spreadsheet.
-    SPREADSHEET_ID = '1_tzqk8V2AsY85fZSG6svHZonFqarmaLN12g6NCznpyk'
+    TEST_SPREADSHEET_ID = '1_tzqk8V2AsY85fZSG6svHZonFqarmaLN12g6NCznpyk'
+    REAL_SPREADSHEET_ID = '1ZCOhZ7KIo9ZsIsoNhvvvWOqsdLFo8rCesosLZ6tOlh0'
     SPENT_TOTAL_NAMED_RANGE = "SpentTotal"
     ENVELOPE_DATE_NAMED_RANGE = "AllEnvelopeData"
     AMOUNT_SPENT_NAMED_RANGE = "AmountSpent"
 
     def __init__(self):
-        GoogleSheetInterface.__init__(self, self.SPREADSHEET_ID)
+        GoogleSheetInterface.__init__(self, self.REAL_SPREADSHEET_ID)
         
     def setEnvelopesInSpreadsheet(self, envelopes):
         result = self.service.spreadsheets().values().get(spreadsheetId=self.spreadsheetId, 
