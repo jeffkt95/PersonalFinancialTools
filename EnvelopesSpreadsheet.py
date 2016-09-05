@@ -1,4 +1,5 @@
 from GoogleSheetInterface import GoogleSheetInterface
+import Utilities
 
 class EnvelopesSpreadsheet(GoogleSheetInterface):
     #This is the ID of my test spreadsheet right now. Note this ID is simply the URL of the spreadsheet.
@@ -32,11 +33,26 @@ class EnvelopesSpreadsheet(GoogleSheetInterface):
         result = self.service.spreadsheets().values().update(
             spreadsheetId=self.spreadsheetId, range=self.AMOUNT_SPENT_NAMED_RANGE, body=myBody, valueInputOption='USER_ENTERED').execute()
             
-        totalInSpreadsheet = self.getCellValueNamedRange(self.SPENT_TOTAL_NAMED_RANGE)
+        totalInSpreadsheet = Utilities.getNumber(self.getCellValueNamedRange(self.SPENT_TOTAL_NAMED_RANGE))
         totalInQuickenExport = envelopes.getTotalExpenses()
         
-        print("Total in spreadsheet after import: " + totalInSpreadsheet)
-        print(          "Total in Quicken export: " + str(totalInQuickenExport))
+        if (totalInSpreadsheet == totalInQuickenExport):
+            print("")
+            print("---------------------  SUCCESS  ---------------------")
+            print("     Successfully copied Quicken data into envelopes.")
+            print("     Total spent from envelopes: $" + str(totalInSpreadsheet))
+            print("")
+        else:
+            print("")
+            print("********************  WARNING!  ********************")
+            print("     Quicken data was copied into envelopes, but the totals don't match.")
+            print("         Quicken total: $" + str(totalInQuickenExport))
+            print("       Envelopes total: $" + str(totalInSpreadsheet))
+            print("       A difference of: $" + str(totalInQuickenExport - totalInSpreadsheet))
+            print("")
+            print("     Try visually comparing the Quicken report to the envelope spreadsheet.")
+            print("     And report the problem to Jeff.")
+            print("")
                   
     #This method takes in the envelopeData, finds the particular envelope, then sets the data
     def setEnvelopeInSpreadsheet(self, envelope, envelopeData, amountSpent):

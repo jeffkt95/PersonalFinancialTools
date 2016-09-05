@@ -9,6 +9,17 @@ def reverseSign(value):
     else:
         return value
 
+#This function takes a string and tries to make it a number. It removes
+#comma delimiters if they're there. If it can't cast as a float, it just
+#returns the argument back.
+def getNumber(value):
+    #Remove commas. Comma delimiters screw up casting as float.
+    strWithoutCommas = value.replace(",", "")
+    if (is_number(strWithoutCommas)):
+        return float(strWithoutCommas)
+    else:
+        return value
+        
 def is_number(s):
     try:
         float(s)
