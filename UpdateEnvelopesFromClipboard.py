@@ -1,5 +1,3 @@
-#change from home computer
-
 from Envelopes import Envelopes
 from GoogleSheetInterface import GoogleSheetInterface
 from EnvelopesSpreadsheet import EnvelopesSpreadsheet
