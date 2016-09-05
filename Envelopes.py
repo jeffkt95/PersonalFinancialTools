@@ -1,5 +1,5 @@
 from Envelope import Envelope
-import datetime
+import Utilities
 
 class Envelopes:
 
@@ -7,9 +7,15 @@ class Envelopes:
         self.envelopes = []
         self.totalExpenses = 0
         
+        #Used for itertion
+        self.envelopeIndex = 0
+        
     def addEnvelope(self, name, amountSpent):
         newEnvelope = Envelope(name, amountSpent)
         self.envelopes.append(newEnvelope)
+        
+    def getTotalExpenses(self):
+        return self.totalExpenses
         
     def __str__(self):
         string = "Envelopes:\n"
@@ -19,34 +25,54 @@ class Envelopes:
         string = string + "TOTAL EXPENSES: " + str(self.totalExpenses)
         return string
         
+    def __iter__(self):
+        return self
+        
+    def __next__(self):
+        if (self.envelopeIndex >= len(self.envelopes)):
+            raise StopIteration
+        else:
+            self.envelopeIndex += 1
+            return self.envelopes[self.envelopeIndex - 1]
+        
     def getEnvelopesFromQuickenExport(self, qExport):
         envelopeListStarted = False
         
         lines = qExport.split("\n")
         
         for line in lines:
-            print("Reading " + line)
             tokens = line.split()
             if (len(tokens) < 2):
                 continue
                 
             if (not envelopeListStarted and tokens[0] == "EXPENSES"):
-                self.totalExpenses = tokens[1]
+                self.totalExpenses = Utilities.reverseSign(tokens[1])
                 envelopeListStarted = True
             elif (envelopeListStarted):
-                if self.isDate(tokens[0]):
-                    #skip it. That's an envelopes detailed breakdown. Not interested in that
+                if Utilities.isDate(tokens[0]):
+                    #skip it. This line is an individual transaction. Not interested in that
                     continue
                 elif tokens[0] == "OVERALL TOTAL":
                     #You're done. Break out
                     break;
                 else:
                     #Found an envelope!
-                    self.addEnvelope(tokens[0], tokens[1])
+                    #The last token is the amount spent. (Check that it's numeric.)
+                    #The tokens before it make up the envelope name. (They could have spaces.)
+                    amountSpent = tokens[len(tokens) - 1]
+                    #Only proceed if the amount spent is a number
+                    if (Utilities.is_number(amountSpent)):
+                        #Amount spent comes in from Quicken as a negative. You want it positive (amount SPENT). So
+                        #   reverse the sign.
+                        amountSpent = Utilities.reverseSign(amountSpent)
+                        
+                        #Next piece the envelope name back together. Go until the second to last one (excluding the amount spent)
+                        envelopeName = ""
+                        for i in range(0, len(tokens) - 1):
+                            if (i==0):
+                                envelopeName = tokens[i]
+                            else:
+                                envelopeName = envelopeName + " " + tokens[i]
+                            
+                        self.addEnvelope(envelopeName, amountSpent)
     
-    def isDate(self, possibleDate):
-        try:
-            datetime.datetime.strptime(possibleDate, '%m/%d/%Y')
-            return True
-        except ValueError:
-            return False

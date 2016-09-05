@@ -14,7 +14,6 @@ class GoogleSheetInterface:
 
     def __init__(self, spreadsheetId):
         self.spreadsheetId = spreadsheetId
-        print("Hello world")
         
     def connect(self):
         credentials = self.get_credentials()
@@ -29,6 +28,12 @@ class GoogleSheetInterface:
     def getCellValue(self, sheetName, cellAddress):
         fullCellAddress = sheetName + "!" + cellAddress
         result = self.service.spreadsheets().values().get(spreadsheetId=self.spreadsheetId, range=fullCellAddress).execute()
+        values = result.get('values', [])
+        return values[0][0]
+
+    #Gets the value of a single cell with a named range
+    def getCellValueNamedRange(self, namedRange):
+        result = self.service.spreadsheets().values().get(spreadsheetId=self.spreadsheetId, range=namedRange).execute()
         values = result.get('values', [])
         return values[0][0]
 
