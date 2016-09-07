@@ -1,14 +1,22 @@
 # PersonalFinancialTools
 A set of tools for my personal finances.
 
-I have a testing spreadsheet for development: "Lyons Envelope Testing"
+ENVELOPE SCRIPT
+This is mostly done now.
 
-It's now working for the real spreadsheet! I need more testing for weirdness that could happen with sub-envelopes.
+POTS AUTOMATION
+--Use cases--
+-Use case 1, pots to envelopes-
+TODO: describe
+
+-Use case 2, envelopes to pots-
+
+-Use case 3, checking/paycheck to pots-
+
+-Use case 4, pots to checking balance, manual envelope adjustment-
+This one might be the most practical. It's also probably one of the easiest to implement. You might want to start with it.
+
 
 TODO: 
     * How about a UI? 
-    * DONE Test fail with empty clipboard
-    * DONE Put try catch around the whole thing
-    * DONE Gracefully handle empty clipboard
-    * DONE Check that first line of report says "Budget check"
-    
+    * Flesh out the above use cases more.
