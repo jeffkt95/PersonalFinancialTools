@@ -8,6 +8,10 @@ class Envelopes:
     #if we included both we'd be double-counting.
     #Right now, the only parent/sub-categories we use are Auto (Auto:Fuel and Auto:Service)
     envelopeIgnoreList = ["Auto"]
+    
+    #The first line should let us know if the clipboard does indeed have the Quicken
+    #report we expect. This first line is expected for these Quicken reports.
+    mFirstLine = "Budget check"
 
     def __init__(self):
         self.envelopes = []
@@ -42,6 +46,10 @@ class Envelopes:
             return self.envelopes[self.envelopeIndex - 1]
         
     def getEnvelopesFromQuickenExport(self, qExport):
+        #First check you've got valid input
+        if (qExport[:len(self.mFirstLine)] != self.mFirstLine):
+            raise QuickenExportFormatError("The first line of the copy should be '" + self.mFirstLine + "'")
+        
         envelopeListStarted = False
         
         lines = qExport.split("\n")
@@ -84,3 +92,6 @@ class Envelopes:
                         if (not envelopeName in self.envelopeIgnoreList):
                             self.addEnvelope(envelopeName, amountSpent)
     
+class QuickenExportFormatError(Exception):
+    def __init__(self, message):
+        self.message = message
