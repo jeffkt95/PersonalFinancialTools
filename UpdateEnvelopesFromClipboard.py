@@ -13,7 +13,7 @@ def main():
     envelopesSpreadsheet.connect()
     envelopesSpreadsheet.setEnvelopesInSpreadsheet(envelopes)
     
-    wait = input("PRESS ENTER TO CONTINUE.")
+    wait = input("Press enter to close this window.")
     
 if __name__ == "__main__":
     main()
