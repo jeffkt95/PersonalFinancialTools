@@ -35,11 +35,17 @@ def isDate(possibleDate):
         return False
 
 def getClipboard():
-    #TODO: gracefully handle an empty clipboard
     win32clipboard.OpenClipboard()
-    fromClipboard = win32clipboard.GetClipboardData()
-    win32clipboard.CloseClipboard
-    return fromClipboard
+    try:
+        fromClipboard = win32clipboard.GetClipboardData()
+    except:
+        #You can raise the exception if there's a failure, but you must close
+        #the clipboard or copy/paste will stop working
+        win32clipboard.CloseClipboard
+        raise
+    else:
+        win32clipboard.CloseClipboard
+        return fromClipboard
     
 def print_data2(values):
     for i in range(len(values)):
