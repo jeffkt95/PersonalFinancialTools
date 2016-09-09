@@ -16,21 +16,6 @@ From savings pots    |   To checking envelopes
 * at the bottom (or top?) you have a running total of the pots/envelopes you've entered so far.
 * 
 
-UI Mockup. 'v' means pulldown.
-
-         Pots -> Envelopes Transfer
-Transfer amount  _____________
----------------------------------------
-From savings pots        |   To checking envelopes
-v Car __200__            |   v Auto:Service __200__
-v Rainy day __550__      |   v Clothing __20___
-                         |   v Dining   __100__
--------------------------------------------                         
-Total pots: 750          |   Total envelopes: 320
-Left to take from pots:  |   Left to allocate to envelopes: 
-
-
-
 #### Use case 2, envelopes to pots-
 
 #### Use case 3, checking/paycheck to pots-
@@ -42,6 +27,21 @@ This one might be the most practical. It's also probably one of the easiest to i
 * OR
 * Enter the new savings balance
 * 
+
+### UI Mockup. 'v' means pulldown.
+
+```
+         Pots -> Envelopes Transfer
+Transfer amount  _____________
+---------------------------------------
+From savings pots        |   To checking envelopes
+v Car __200__            |   v Auto:Service __200__
+v Rainy day __550__      |   v Clothing __20___
+                         |   v Dining   __100__
+-------------------------------------------                         
+Total pots: 750          |   Total envelopes: 320
+Left to take from pots:  |   Left to allocate to envelopes: 
+```
 
 # TODO
 * How about a UI? 
