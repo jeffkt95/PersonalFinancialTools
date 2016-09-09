@@ -8,7 +8,28 @@ POTS AUTOMATION
 --Use cases--
 -Use case 1, pots to envelopes-
 * User enters total transfer amount
-* User 
+* Interface has two columns:
+From savings pots    |   To checking envelopes
+
+* The columns either list all the pots/envelopes, or it has pulldowns that allow you to add new pots/envelopes
+* Each row within the column as the pulldown and a text field. The text field is where you enter the amount.
+* at the bottom (or top?) you have a running total of the pots/envelopes you've entered so far.
+* 
+
+UI Mockup. 'v' means pulldown.
+
+         Pots -> Envelopes Transfer
+Transfer amount  _____________
+---------------------------------------
+From savings pots        |   To checking envelopes
+v Car __200__            |   v Auto:Service __200__
+v Rainy day __550__      |   v Clothing __20___
+                         |   v Dining   __100__
+-------------------------------------------                         
+Total pots: 750          |   Total envelopes: 320
+Left to take from pots:  |   Left to allocate to envelopes: 
+
+
 
 -Use case 2, envelopes to pots-
 
@@ -23,5 +44,5 @@ This one might be the most practical. It's also probably one of the easiest to i
 * 
 
 TODO: 
-    * How about a UI? 
-    * Flesh out the above use cases more.
+* How about a UI? 
+* Flesh out the above use cases more.
