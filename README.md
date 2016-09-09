@@ -51,6 +51,7 @@ Left to take from pots:  |   Left to allocate to envelopes:
   * Adding new spots for pots/envelopes. By default there will only be one
   * Modifying totals based on user input
   * Enable/disable OK button based on totals matching. 
+  * Fill pulldown options with envelopes/pots
 * Implement classes required for back-end code.
   * Envelopes. Parse the envelopes spreadsheet and store them. (I alreaady have code to do this.)
   * Pots. Parse the pots spreadsheet and store them. Will be very similar to the envelopes code I already implemented this.
