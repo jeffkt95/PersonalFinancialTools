@@ -47,13 +47,13 @@ Left to take from pots:  |   Left to allocate to envelopes:
 ```
 
 # TODO
-* Implement classes required for back-end code.
-  * Envelopes. Parse the envelopes spreadsheet and store them. (I alreaady have code to do this.)
-  * Pots. Parse the pots spreadsheet and store them. Will be very similar to the envelopes code I already implemented this.
 * Start working on the GUI. Prototype it out. Particularly...
   * Adding new spots for pots/envelopes. By default there will only be one
   * Modifying totals based on user input
   * Enable/disable OK button based on totals matching. 
+* Implement classes required for back-end code.
+  * Envelopes. Parse the envelopes spreadsheet and store them. (I alreaady have code to do this.)
+  * Pots. Parse the pots spreadsheet and store them. Will be very similar to the envelopes code I already implemented this.
 * Execute the transfer.
   * In pots spreadsheet:
     * Add a column, copy previous
