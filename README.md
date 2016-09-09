@@ -41,8 +41,24 @@ v Rainy day __550__      |   v Clothing __20___
 -------------------------------------------                         
 Total pots: 750          |   Total envelopes: 320
 Left to take from pots:  |   Left to allocate to envelopes: 
+-------------------------------------------
+     OK                           Cancel
+(The OK button will be disabled until the pots and envelopes totals match the transfer amount.)
 ```
 
 # TODO
-* How about a UI? 
-* Flesh out the above use cases more.
+* Implement classes required for back-end code.
+  * Envelopes. Parse the envelopes spreadsheet and store them. (I alreaady have code to do this.)
+  * Pots. Parse the pots spreadsheet and store them. Will be very similar to the envelopes code I already implemented this.
+* Start working on the GUI. Prototype it out. Particularly...
+  * Adding new spots for pots/envelopes. By default there will only be one
+  * Modifying totals based on user input
+  * Enable/disable OK button based on totals matching. 
+* Execute the transfer.
+  * In pots spreadsheet:
+    * Add a column, copy previous
+    * Decrement the savings balance by the transfer amount
+    * Adjust the pots based on the inputs
+  * In the envelopes spreadsheet
+    * Increase the total at the top
+    * Adjust the envelopes based on the inputs
