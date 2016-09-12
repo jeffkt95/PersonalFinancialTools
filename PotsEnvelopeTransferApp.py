@@ -57,10 +57,12 @@ class PotsEnvelopeTransferApp:
         addEnvelopeButton.grid(row=0, column=1, sticky=E)        
         
         removePotButton = Button(fromPotFrame, text="-", command=self.removePot)
-        removePotButton.grid(row=0, column=2, sticky=E)        
+        removePotButton.grid(row=0, column=2, sticky=E)
+        self.removePotButton = removePotButton
         
         removeEnvelopeButton = Button(fromEnvelopeFrame, text="-", command=self.removeEnvelope)
         removeEnvelopeButton.grid(row=0, column=2, sticky=E)        
+        self.removeEnvelopeButton = removeEnvelopeButton
         
         # Row 4 ##################################################################
         # This row has a frame for the envelopes and a frame for the pots
@@ -141,6 +143,9 @@ class PotsEnvelopeTransferApp:
         
         potWidgets = DoubleValueWidgets(potOneOption, potOneAmount, potVariable)
         self.potsWidgets.append(potWidgets)
+
+        self.setRemovePotButtonState()
+
         return potWidgets
         
     def addEnvelope(self):
@@ -159,6 +164,9 @@ class PotsEnvelopeTransferApp:
         
         envelopeWidgets = DoubleValueWidgets(envelopeOneOption, envelopeOneAmount, envelopeVariable)
         self.envelopesWidgets.append(envelopeWidgets)
+        
+        self.setRemoveEnvelopeButtonState()
+
         return envelopeWidgets
 
     def getEnvelopesTotal(self):
@@ -176,11 +184,35 @@ class PotsEnvelopeTransferApp:
         return sum
     
     def removePot(self):
-        print("TODO: implement removePot")
+        #Get the last pot in the array. Remove its widgets from the UI, then remove the item from the list
+        potWidgets = self.potsWidgets[-1]
+        potWidgets.removeWidgets()
+        del self.potsWidgets[-1]
+        self.setRemovePotButtonState()
+        self.potAmountChanged(None)
 
     def removeEnvelope(self):
-        print("TODO: implement removeEnvelope")
+        #Get the last envelope in the array. Remove its widgets from the UI, then remove the item from the list
+        envelopesWidgets = self.envelopesWidgets[-1]
+        envelopesWidgets.removeWidgets()
+        del self.envelopesWidgets[-1]
+        self.setRemoveEnvelopeButtonState()
+        self.envelopeAmountChanged(None)
 
+    #Fixes the state of the remove pot button. Should be disabled when there are no pots, enabled otherwise
+    def setRemovePotButtonState(self):
+        if (len(self.potsWidgets) == 0):
+            self.removePotButton['state'] = 'disabled'
+        else:
+            self.removePotButton['state'] = 'normal'
+            
+    #Fixes the state of the remove pot button. Should be disabled when there are no pots, enabled otherwise
+    def setRemoveEnvelopeButtonState(self):
+        if (len(self.envelopesWidgets) == 0):
+            self.removeEnvelopeButton['state'] = 'disabled'
+        else:
+            self.removeEnvelopeButton['state'] = 'normal'
+            
     def okClicked(self):
         print("TODO: implement okClicked")
 

@@ -9,4 +9,7 @@ class DoubleValueWidgets:
     def getDouble(self):
         return self.doubleVariable.get()
         
-        
+    def removeWidgets(self):
+        self.option.grid_remove()
+        self.entry.grid_remove()
+        #Should I remove the doubleVariable? If so, how do I do it?
