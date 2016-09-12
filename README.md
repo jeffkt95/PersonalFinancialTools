@@ -47,12 +47,13 @@ Left to take from pots:  |   Left to allocate to envelopes:
 ```
 
 # TODO
-* Start working on the GUI. Prototype it out. Particularly...
+* Implement the GUI
   * DONE Adding new spots for pots/envelopes. By default there will only be one
   * DONE Modifying totals based on user input
   * Add ability to remove spots for pots/envelopes. Just remove the bottom one. You have to remove it from the UI and the array/list.
   * Enable/disable OK button based on totals matching. 
   * Fill pulldown options with envelopes/pots
+  * Do some green/red color coding based on whent the totals match and are ready to go.
 * Implement classes required for back-end code.
   * Envelopes. Parse the envelopes spreadsheet and store them. (I alreaady have code to do this.)
   * Pots. Parse the pots spreadsheet and store them. Will be very similar to the envelopes code I already implemented this.
