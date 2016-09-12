@@ -34,7 +34,6 @@ def main():
         print("")
         print("Contact Mr. Jeffrey for technical support.")
         print("")
-        raise
     
     wait = input("Press enter to close this window.")
     
