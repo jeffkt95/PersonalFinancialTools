@@ -48,8 +48,9 @@ Left to take from pots:  |   Left to allocate to envelopes:
 
 # TODO
 * Start working on the GUI. Prototype it out. Particularly...
-  * Adding new spots for pots/envelopes. By default there will only be one
-  * Modifying totals based on user input
+  * DONE Adding new spots for pots/envelopes. By default there will only be one
+  * DONE Modifying totals based on user input
+  * Add ability to remove spots for pots/envelopes. Just remove the bottom one. You have to remove it from the UI and the array/list.
   * Enable/disable OK button based on totals matching. 
   * Fill pulldown options with envelopes/pots
 * Implement classes required for back-end code.
