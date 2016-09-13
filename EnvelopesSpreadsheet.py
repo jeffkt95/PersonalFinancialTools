@@ -10,11 +10,15 @@ class EnvelopesSpreadsheet(GoogleSheetInterface):
     AMOUNT_SPENT_NAMED_RANGE = "AmountSpent"
 
     def __init__(self):
-        GoogleSheetInterface.__init__(self, self.REAL_SPREADSHEET_ID)
+        GoogleSheetInterface.__init__(self, self.TEST_SPREADSHEET_ID)
         
-    def setEnvelopesInSpreadsheet(self, envelopes):
+    def loadEnvelopeData(self):
         result = self.service.spreadsheets().values().get(spreadsheetId=self.spreadsheetId, 
                                                             range=self.ENVELOPE_DATE_NAMED_RANGE).execute()
+        return result
+        
+    def setEnvelopesInSpreadsheet(self, envelopes):
+        result = self.loadEnvelopeData()
         
         envelopeData = result.get('values', [])
         
@@ -54,6 +58,21 @@ class EnvelopesSpreadsheet(GoogleSheetInterface):
             print("     And report the problem to Jeff.")
             print("")
                   
+    def getEnvelopeList(self):
+        envelopeList = []
+
+        result = self.loadEnvelopeData()
+        envelopeData = result.get('values', [])
+        
+        if not envelopeData:
+            print("There was a problem getting envelope data from the spreadsheet. It returned null.")
+            return
+
+        for i in range(0, len(envelopeData)):
+            envelopeList.append(envelopeData[i][0])
+            
+        return envelopeList
+        
     #This method takes in the envelopeData, finds the particular envelope, then sets the data
     def setEnvelopeInSpreadsheet(self, envelope, envelopeData, amountSpent):
         envelopeName = envelope.getName()

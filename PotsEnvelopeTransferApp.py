@@ -1,5 +1,7 @@
 from tkinter import *
 from DoubleValueWidgets import DoubleValueWidgets
+from EnvelopesSpreadsheet import EnvelopesSpreadsheet
+from PotsSpreadsheet import PotsSpreadsheet
 
 class PotsEnvelopeTransferApp:
     envelopeLastRow = 0
@@ -9,6 +11,9 @@ class PotsEnvelopeTransferApp:
     envelopesWidgets = []
     
     def __init__(self, master):
+        #Init the google spreadsheet
+        self.initSpreadsheets()
+
         self.master = master
                 
         frame = Frame(master)
@@ -132,10 +137,19 @@ class PotsEnvelopeTransferApp:
         
         self.setReadyForExecuteState()
         
+    def initSpreadsheets(self):
+        envelopesSpreadsheet = EnvelopesSpreadsheet()
+        envelopesSpreadsheet.connect()
+        self.envelopeList = envelopesSpreadsheet.getEnvelopeList()
+        
+        potsSpreadsheet = PotsSpreadsheet()
+        potsSpreadsheet.connect()
+        self.potsList = potsSpreadsheet.getPotsList()
+        
     def addPot(self):
         potOneVariable = StringVar(self.master)
-        potOneVariable.set("Car")
-        potOneOption = OptionMenu(self.potFrame, potOneVariable, "Car", "Charity", "Rainy day")
+        potOneVariable.set(self.potsList[0])
+        potOneOption = OptionMenu(self.potFrame, potOneVariable, *self.potsList)
         potOneOption.grid(row=self.potLastRow, column=0)
         
         potVariable = DoubleVar()
@@ -155,8 +169,8 @@ class PotsEnvelopeTransferApp:
         
     def addEnvelope(self):
         envelopeOneVariable = StringVar(self.master)
-        envelopeOneVariable.set("Car")
-        envelopeOneOption = OptionMenu(self.envelopeFrame, envelopeOneVariable, "Car", "Charity", "Rainy day")
+        envelopeOneVariable.set(self.envelopeList[0])
+        envelopeOneOption = OptionMenu(self.envelopeFrame, envelopeOneVariable, *self.envelopeList)
         envelopeOneOption.grid(row=self.envelopeLastRow, column=0)
         
         envelopeVariable = DoubleVar()

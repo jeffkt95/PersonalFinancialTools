@@ -51,9 +51,15 @@ Left to take from pots:  |   Left to allocate to envelopes:
   * DONE Adding new spots for pots/envelopes. By default there will only be one
   * DONE Modifying totals based on user input
   * DONE Add ability to remove spots for pots/envelopes. Just remove the bottom one. You have to remove it from the UI and the array/list.
-  * Enable/disable OK button based on totals matching. 
-  * Do some green/red color coding based on whent the totals match and are ready to go.
-  * Fill pulldown options with envelopes/pots
+  * DONE Enable/disable OK button based on totals matching. 
+  * DONE Do some green/red color coding based on whent the totals match and are ready to go.
+  * DONE Fill pulldown options with envelopes/pots
+    * Done, except hidden rows are killing me. No API for this. Try adapting this workaround to the python API: https://code.google.com/p/google-apps-script-issues/issues/detail?id=195#c50
+    * Since API doesn't support querying if row is hidden, and the workaround is a messy hack not even implemented in the python API, I'll instead move the hidden rows below the unhidden ones, and only include the unhidden, active rows in the named range.
+      * Do this for both the test spreadsheet and the real one.
+  * I had to change some of the classes that the other app uses, "Copy Quicken into spreadsheet" app. I need to test that I didn't break anything.
+  * Add buttons to launch the pots and envelope spreadsheets
+  * Add space/buffer between the pots and envelope columns
 * Implement classes required for back-end code.
   * Envelopes. Parse the envelopes spreadsheet and store them. (I alreaady have code to do this.)
   * Pots. Parse the pots spreadsheet and store them. Will be very similar to the envelopes code I already implemented this.
