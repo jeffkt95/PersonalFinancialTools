@@ -20,7 +20,6 @@ class PotsSpreadsheet(GoogleSheetInterface):
 
         result = self.loadPotsData()
         potsData = result.get('values', [])
-        print(str(potsData))
         
         if not potsData:
             print("There was a problem getting envelope data from the spreadsheet. It returned null.")

@@ -59,10 +59,10 @@ Left to take from pots:  |   Left to allocate to envelopes:
       * Do this for both the test spreadsheet and the real one.
   * I had to change some of the classes that the other app uses, "Copy Quicken into spreadsheet" app. I need to test that I didn't break anything.
   * Add buttons to launch the pots and envelope spreadsheets
-  * Add space/buffer between the pots and envelope columns
+  * DONE Add space/buffer between the pots and envelope columns
 * Implement classes required for back-end code.
-  * Envelopes. Parse the envelopes spreadsheet and store them. (I alreaady have code to do this.)
-  * Pots. Parse the pots spreadsheet and store them. Will be very similar to the envelopes code I already implemented this.
+  * Envelopes. An array of objects with the values put in the GUI
+  * Pots. An array of objects with the values put in the GUI
 * Execute the transfer.
   * In pots spreadsheet:
     * Add a column, copy previous

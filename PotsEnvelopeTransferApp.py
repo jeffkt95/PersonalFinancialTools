@@ -2,6 +2,8 @@ from tkinter import *
 from DoubleValueWidgets import DoubleValueWidgets
 from EnvelopesSpreadsheet import EnvelopesSpreadsheet
 from PotsSpreadsheet import PotsSpreadsheet
+from TransferParameters import TransferParameters
+from TransferProcessor import TransferProcessor
 
 class PotsEnvelopeTransferApp:
     envelopeLastRow = 0
@@ -128,7 +130,7 @@ class PotsEnvelopeTransferApp:
 
         # Row ##################################################################
         mainFrameRow += 1
-        okButton = Button(frame, text="OK", command=self.okClicked)
+        okButton = Button(frame, text="Execute transfer", command=self.okClicked)
         okButton.grid(row=mainFrameRow, column=0)
         self.okButton = okButton
         
@@ -138,13 +140,18 @@ class PotsEnvelopeTransferApp:
         self.setReadyForExecuteState()
         
     def initSpreadsheets(self):
-        envelopesSpreadsheet = EnvelopesSpreadsheet()
-        envelopesSpreadsheet.connect()
-        self.envelopeList = envelopesSpreadsheet.getEnvelopeList()
+        self.envelopesSpreadsheet = EnvelopesSpreadsheet()
+        self.envelopesSpreadsheet.connect()
+        self.envelopeList = self.envelopesSpreadsheet.getEnvelopeList()
         
-        potsSpreadsheet = PotsSpreadsheet()
-        potsSpreadsheet.connect()
-        self.potsList = potsSpreadsheet.getPotsList()
+        self.potsSpreadsheet = PotsSpreadsheet()
+        self.potsSpreadsheet.connect()
+        self.potsList = self.potsSpreadsheet.getPotsList()
+        
+        #I've got this sitting here to do some testing right now. I really don't do this until okClicked
+        transferProcessor = TransferProcessor(None, self.potsSpreadsheet, self.envelopesSpreadsheet)
+        transferProcessor.processTransfer()
+
         
     def addPot(self):
         potOneVariable = StringVar(self.master)
@@ -156,11 +163,12 @@ class PotsEnvelopeTransferApp:
         potVariable.trace("w", lambda name, index, mode,
                     potVariable=potVariable: self.potAmountChanged(potVariable))
         potOneAmount = Entry(self.potFrame, textvariable=potVariable)
-        potOneAmount.grid(row=self.potLastRow, column=1)
+        #Pad on the right to have space between the pots/envelopes column.
+        potOneAmount.grid(row=self.potLastRow, column=1, padx=(0, 6))
         
         self.potLastRow = self.potLastRow + 1
         
-        potWidgets = DoubleValueWidgets(potOneOption, potOneAmount, potVariable)
+        potWidgets = DoubleValueWidgets(potOneOption, potOneVariable, potOneAmount, potVariable)
         self.potsWidgets.append(potWidgets)
 
         self.setRemovePotButtonState()
@@ -171,7 +179,8 @@ class PotsEnvelopeTransferApp:
         envelopeOneVariable = StringVar(self.master)
         envelopeOneVariable.set(self.envelopeList[0])
         envelopeOneOption = OptionMenu(self.envelopeFrame, envelopeOneVariable, *self.envelopeList)
-        envelopeOneOption.grid(row=self.envelopeLastRow, column=0)
+        #Pad on the left to have space between the pots/envelopes column.
+        envelopeOneOption.grid(row=self.envelopeLastRow, column=0, padx=(6, 0))
         
         envelopeVariable = DoubleVar()
         envelopeVariable.trace("w", lambda name, index, mode,
@@ -181,7 +190,7 @@ class PotsEnvelopeTransferApp:
         
         self.envelopeLastRow = self.envelopeLastRow + 1        
         
-        envelopeWidgets = DoubleValueWidgets(envelopeOneOption, envelopeOneAmount, envelopeVariable)
+        envelopeWidgets = DoubleValueWidgets(envelopeOneOption, envelopeOneVariable, envelopeOneAmount, envelopeVariable)
         self.envelopesWidgets.append(envelopeWidgets)
         
         self.setRemoveEnvelopeButtonState()
@@ -191,14 +200,14 @@ class PotsEnvelopeTransferApp:
     def getEnvelopesTotal(self):
         sum = 0
         for doubleValueWidgets in self.envelopesWidgets:
-            sum = sum + doubleValueWidgets.getDouble()
+            sum = sum + doubleValueWidgets.getDoubleValue()
             
         return sum
     
     def getPotsTotal(self):
         sum = 0
         for doubleValueWidgets in self.potsWidgets:
-            sum = sum + doubleValueWidgets.getDouble()
+            sum = sum + doubleValueWidgets.getDoubleValue()
             
         return sum
     
@@ -233,7 +242,19 @@ class PotsEnvelopeTransferApp:
             self.removeEnvelopeButton['state'] = 'normal'
             
     def okClicked(self):
-        print("TODO: implement okClicked")
+        transferParameters = TransferParameters(self.transferAmount.get(), True)
+        
+        for pot in self.potsWidgets:
+            transferParameters.addPot(pot.getSelectedName(), pot.getDoubleValue())
+            
+        for envelope in self.envelopesWidgets:
+            transferParameters.addEnvelope(envelope.getSelectedName(), envelope.getDoubleValue())
+            
+        print("Finished getting transferParameters from UI")
+        print(transferParameters)
+        
+        processParameters = ProcessParameters(transferParameters, self.potsSpreadsheet, self.envelopesSpreadsheet)
+        processParameters.processTransfer()
 
     def cancelClicked(self):
         print("TODO: implement cancelClicked")
@@ -243,6 +264,8 @@ class PotsEnvelopeTransferApp:
     def setReadyForExecuteState(self):
         #If there's a non-zero transfer amount, and the pots and envelopes add up to that amount
         #(i.e. there's nothing left to take from/allocate to them), then it's ready for execution
+        
+        print("In setReadyForExecuteState")
         if (self.transferAmount.get() > 0.0 and 
                 self.leftToTakeFromPots.get() == 0 and 
                 self.leftToTakeFromEnvelopes.get() == 0):
@@ -257,10 +280,8 @@ class PotsEnvelopeTransferApp:
                 self.leftToTakePotsLabelAmount['foreground'] = 'red'
                 
             if (self.leftToTakeFromEnvelopes.get() == 0.0 and self.transferAmount.get() > 0.0):
-                print("Envelopes good. Set green.")
                 self.leftToTakeFromEnvelopesLabelAmount['foreground'] = 'green'
             else:
-                print("Envelopes bad. Set red.")
                 self.leftToTakeFromEnvelopesLabelAmount['foreground'] = 'red'
     
     def envelopeAmountChanged(self, envelopeAmountVariable):
@@ -271,17 +292,25 @@ class PotsEnvelopeTransferApp:
             self.leftToTakeFromEnvelopes.set(transferAmount - totalEnvelopes)
             self.setReadyForExecuteState()
         except:
-            print("Exception!")
+            print("Exception, envelopeAmountChanged")
+            pass
             
     def potAmountChanged(self, potAmountVariable):
         try:
+            print("Debug 1")
             transferAmount = self.transferAmount.get()
+            print("Debug 2")
             totalPots = self.getPotsTotal()
+            print("Debug 3")
             self.totalPotsAmount.set(totalPots)
+            print("Debug 4")
             self.leftToTakeFromPots.set(transferAmount - totalPots)
+            print("Debug 5")
             self.setReadyForExecuteState()
+            print("Debug 6")
         except:
-            print("Exception!")
+            print("Exception, potAmountChanged")
+            pass
     
     def transferAmountChanged(self, transferAmountVariable):
         try:
@@ -289,15 +318,13 @@ class PotsEnvelopeTransferApp:
             self.potAmountChanged(None)
             self.setReadyForExecuteState()
         except:
-            print("Exception!")
+            print("Exception, transferAmountChanged")
+            pass
          
 def main():
     root = Tk()
     app = PotsEnvelopeTransferApp(root)
-
-    print("Entering mainloop")
     root.mainloop()
-    print("Done in mainloop")
 
 if __name__ == "__main__":
     main()
