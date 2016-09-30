@@ -177,6 +177,7 @@ class PotsEnvelopeTransferApp:
         self.potsWidgets.append(potWidgets)
 
         self.setRemovePotButtonState()
+        self.potAmountChanged(None)
 
         return potWidgets
         
@@ -199,6 +200,7 @@ class PotsEnvelopeTransferApp:
         self.envelopesWidgets.append(envelopeWidgets)
         
         self.setRemoveEnvelopeButtonState()
+        self.envelopeAmountChanged(None)
 
         return envelopeWidgets
 
@@ -266,14 +268,20 @@ class PotsEnvelopeTransferApp:
         
     #This method sets color and state for different widgets based on whether or not the 
     #transfer is ready for execution.
+    
     def setReadyForExecuteState(self):
         #If there's a non-zero transfer amount, and the pots and envelopes add up to that amount
         #(i.e. there's nothing left to take from/allocate to them), then it's ready for execution
         
+        atLeastOnePotEnvelope = True
+        if (len(self.potsWidgets) == 0 and len(self.envelopesWidgets) == 0):
+            atLeastOnePotEnvelope = False
+        
         print("In setReadyForExecuteState")
         if (self.transferAmount.get() > 0.0 and 
                 self.leftToTakeFromPots.get() == 0 and 
-                self.leftToTakeFromEnvelopes.get() == 0):
+                self.leftToTakeFromEnvelopes.get() == 0 and
+                atLeastOnePotEnvelope == True):
             self.okButton['state'] = 'normal'
             self.leftToTakePotsLabelAmount['foreground'] = 'green'
             self.leftToTakeFromEnvelopesLabelAmount['foreground'] = 'green'
@@ -294,7 +302,12 @@ class PotsEnvelopeTransferApp:
             transferAmount = self.transferAmount.get()
             totalEnvelopes = self.getEnvelopesTotal()
             self.totalEnvelopesAmount.set(totalEnvelopes)
-            self.leftToTakeFromEnvelopes.set(transferAmount - totalEnvelopes)
+            
+            #Allow for a no-envelopes transfer
+            if (len(self.envelopesWidgets) == 0):
+                self.leftToTakeFromEnvelopes.set(0)
+            else:
+                self.leftToTakeFromEnvelopes.set(transferAmount - totalEnvelopes)
             self.setReadyForExecuteState()
         except:
             print("Exception, envelopeAmountChanged")
@@ -302,17 +315,16 @@ class PotsEnvelopeTransferApp:
             
     def potAmountChanged(self, potAmountVariable):
         try:
-            print("Debug 1")
             transferAmount = self.transferAmount.get()
-            print("Debug 2")
             totalPots = self.getPotsTotal()
-            print("Debug 3")
             self.totalPotsAmount.set(totalPots)
-            print("Debug 4")
-            self.leftToTakeFromPots.set(transferAmount - totalPots)
-            print("Debug 5")
+
+            #Allow for a no-pots transfer
+            if (len(self.potsWidgets) == 0):
+                self.leftToTakeFromPots.set(0)
+            else:
+                self.leftToTakeFromPots.set(transferAmount - totalPots)
             self.setReadyForExecuteState()
-            print("Debug 6")
         except:
             print("Exception, potAmountChanged")
             pass
@@ -331,12 +343,12 @@ class PotsEnvelopeTransferApp:
             self.transferDirectionPotsToEnvelopes = False
             self.transferDirectionButton["text"] = "<-"
             self.fromSavingsPotsLabel["text"] = "To savings pots"
-            self.toCheckingEnvelopesLabel["text"] = "From savings pots"
+            self.toCheckingEnvelopesLabel["text"] = "From checking envelopes"
         else:
             self.transferDirectionPotsToEnvelopes = True
             self.transferDirectionButton["text"] = "->"
             self.fromSavingsPotsLabel["text"] = "From savings pots"
-            self.toCheckingEnvelopesLabel["text"] = "To savings pots"
+            self.toCheckingEnvelopesLabel["text"] = "To checking envelopes"
             
 def main():
     root = Tk()
