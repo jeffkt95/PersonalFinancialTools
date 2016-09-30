@@ -10,7 +10,11 @@ class PotsEnvelopeTransferApp:
     potLastRow = 0
     totalGridWidth = 2
     
-    transferDirectionPotsToEnvelopes = True
+    ENVELOPES = "Envelopes"
+    POTS = "Pots"
+    PotsEnvelopesEnumerate = [ENVELOPES, POTS]
+
+    transferTo = ENVELOPES
     
     potsWidgets = []
     envelopesWidgets = []
@@ -18,7 +22,6 @@ class PotsEnvelopeTransferApp:
     def __init__(self, master):
         #Init the google spreadsheet
         self.initSpreadsheets()
-
         self.master = master
                 
         frame = Frame(master)
@@ -102,40 +105,53 @@ class PotsEnvelopeTransferApp:
         # Row ##################################################################
         # This row has a frame for the envelopes and a frame for the pots
         mainFrameRow += 1
+        
         totalPotsFrame = Frame(frame)
         totalPotsFrame.grid(row=mainFrameRow, column=0, sticky=N)
         
         totalEnvelopesFrame = Frame(frame)
         totalEnvelopesFrame.grid(row=mainFrameRow, column=1, sticky=N)
 
+        innerFrameRow = 0
+
+        launchPotsButton = Button(totalPotsFrame, text="Open pots spreadsheet", command=lambda: self.openSpreadsheet(self.POTS))
+        launchPotsButton.grid(row=innerFrameRow, column=0)        
+        
+        launchEnvelopesButton = Button(totalEnvelopesFrame, text="Open envelopes spreadsheet", command=lambda: self.openSpreadsheet(self.ENVELOPES))
+        launchEnvelopesButton.grid(row=innerFrameRow, column=0)        
+        
+        innerFrameRow += 1
+        
         totalPotsLabel = Label(totalPotsFrame, text="Total pots:")
-        totalPotsLabel.grid(row=0, column=0)
+        totalPotsLabel.grid(row=innerFrameRow, column=0)
         
         self.totalPotsAmount = DoubleVar()
         totalPotsLabelAmount = Label(totalPotsFrame, text="0", textvariable=self.totalPotsAmount)
-        totalPotsLabelAmount.grid(row=0, column=1)
+        totalPotsLabelAmount.grid(row=innerFrameRow, column=1)
 
         totalEnvelopesLabel = Label(totalEnvelopesFrame, text="Total envelopes:")
-        totalEnvelopesLabel.grid(row=0, column=0)
+        totalEnvelopesLabel.grid(row=innerFrameRow, column=0)
 
         self.totalEnvelopesAmount = DoubleVar()
         totalEnvelopesLabelAmount = Label(totalEnvelopesFrame, text="0", textvariable=self.totalEnvelopesAmount)
-        totalEnvelopesLabelAmount.grid(row=0, column=1)
+        totalEnvelopesLabelAmount.grid(row=innerFrameRow, column=1)
 
+        innerFrameRow += 1
+        
         leftToTakePotsLabel = Label(totalPotsFrame, text="Left to take from pots:")
-        leftToTakePotsLabel.grid(row=1, column=0)
+        leftToTakePotsLabel.grid(row=innerFrameRow, column=0)
 
         leftToTakeFromEnvelopesLabel = Label(totalEnvelopesFrame, text="Left to allocate to envelopes:")
-        leftToTakeFromEnvelopesLabel.grid(row=1, column=0)
+        leftToTakeFromEnvelopesLabel.grid(row=innerFrameRow, column=0)
 
         self.leftToTakeFromPots = DoubleVar()
         leftToTakePotsLabelAmount = Label(totalPotsFrame, text="0", textvariable=self.leftToTakeFromPots)
-        leftToTakePotsLabelAmount.grid(row=1, column=1)
+        leftToTakePotsLabelAmount.grid(row=innerFrameRow, column=1)
         self.leftToTakePotsLabelAmount = leftToTakePotsLabelAmount
 
         self.leftToTakeFromEnvelopes = DoubleVar()
         leftToTakeFromEnvelopesLabelAmount = Label(totalEnvelopesFrame, text="0", textvariable=self.leftToTakeFromEnvelopes)
-        leftToTakeFromEnvelopesLabelAmount.grid(row=1, column=1)
+        leftToTakeFromEnvelopesLabelAmount.grid(row=innerFrameRow, column=1)
         self.leftToTakeFromEnvelopesLabelAmount = leftToTakeFromEnvelopesLabelAmount
 
         # Row ##################################################################
@@ -144,7 +160,7 @@ class PotsEnvelopeTransferApp:
         okButton.grid(row=mainFrameRow, column=0)
         self.okButton = okButton
         
-        cancelButton = Button(frame, text="Cancel", command=self.cancelClicked)
+        cancelButton = Button(frame, text="Cancel", command=self.closeWindow)
         cancelButton.grid(row=mainFrameRow, column=1)
         
         self.setReadyForExecuteState()
@@ -263,9 +279,6 @@ class PotsEnvelopeTransferApp:
         transferProcessor = TransferProcessor(transferParameters, self.potsSpreadsheet, self.envelopesSpreadsheet)
         transferProcessor.processTransfer()
 
-    def cancelClicked(self):
-        print("TODO: implement cancelClicked")
-        
     #This method sets color and state for different widgets based on whether or not the 
     #transfer is ready for execution.
     
@@ -277,7 +290,6 @@ class PotsEnvelopeTransferApp:
         if (len(self.potsWidgets) == 0 and len(self.envelopesWidgets) == 0):
             atLeastOnePotEnvelope = False
         
-        print("In setReadyForExecuteState")
         if (self.transferAmount.get() > 0.0 and 
                 self.leftToTakeFromPots.get() == 0 and 
                 self.leftToTakeFromEnvelopes.get() == 0 and
@@ -339,17 +351,26 @@ class PotsEnvelopeTransferApp:
             pass
         
     def changeTransferDirection(self):
-        if (self.transferDirectionPotsToEnvelopes == True):
-            self.transferDirectionPotsToEnvelopes = False
+        if (self.transferTo == self.ENVELOPES):
+            self.transferTo = self.POTS
             self.transferDirectionButton["text"] = "<-"
             self.fromSavingsPotsLabel["text"] = "To savings pots"
             self.toCheckingEnvelopesLabel["text"] = "From checking envelopes"
         else:
-            self.transferDirectionPotsToEnvelopes = True
+            self.transferTo = self.ENVELOPES
             self.transferDirectionButton["text"] = "->"
             self.fromSavingsPotsLabel["text"] = "From savings pots"
             self.toCheckingEnvelopesLabel["text"] = "To checking envelopes"
-            
+
+    def openSpreadsheet(self, spreadsheetToOpen):
+        if spreadsheetToOpen == self.POTS:
+            self.potsSpreadsheet.openSpreadsheet()
+        else:
+            self.envelopesSpreadsheet.openSpreadsheet()
+        
+    def closeWindow(self):
+        self.master.destroy()
+        
 def main():
     root = Tk()
     app = PotsEnvelopeTransferApp(root)
