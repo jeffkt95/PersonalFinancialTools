@@ -4,11 +4,17 @@ class TransferParameters:
     envelopes = []
     pots = []
     
-    #potsToEnvelopes is a bool. If true, the transfer goes from pots to envelopes
-    #       If false, transfer is from envelopes to pots
-    def __init__(self, transferAmount, potsToEnvelopes):
+    ENVELOPES = "Envelopes"
+    POTS = "Pots"
+    transferTo = ENVELOPES
+    
+    def __init__(self, transferAmount, transferTo):
+        #Clear the arrays
+        self.envelopes = []
+        self.pots = []
+        
         self.transferAmount = transferAmount
-        self.potsToEnvelopes = potsToEnvelopes
+        self.transferTo = transferTo
         
     def addEnvelope(self, name, value):
         self.envelopes.append(Envelope(name, value))
@@ -16,13 +22,13 @@ class TransferParameters:
     def addPot(self, name, value):
         self.pots.append(Envelope(name, value))
         
-    def getPotsToEnvelopesBool(self):
-        return self.potsToEnvelopes
+    def getTransferTo(self):
+        return self.transferTo
     
     def __str__(self):
         string = "Transfer, amount: " + str(self.transferAmount) + "\n"
         
-        if (self.potsToEnvelopes):
+        if (self.transferTo == self.ENVELOPES):
             string = string + "  Transfer goes from pots to envelopes\n"
         else:
             string = string + "  Transfer goes from envelopes to pots\n"

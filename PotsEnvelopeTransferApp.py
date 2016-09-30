@@ -156,7 +156,7 @@ class PotsEnvelopeTransferApp:
 
         # Row ##################################################################
         mainFrameRow += 1
-        okButton = Button(frame, text="Execute transfer", command=self.okClicked)
+        okButton = Button(frame, text="Execute transfer", command=lambda: self.okClicked())
         okButton.grid(row=mainFrameRow, column=0)
         self.okButton = okButton
         
@@ -265,7 +265,10 @@ class PotsEnvelopeTransferApp:
             self.removeEnvelopeButton['state'] = 'normal'
             
     def okClicked(self):
-        transferParameters = TransferParameters(self.transferAmount.get(), True)
+        transferParameters = None
+        transferProcessor = None
+
+        transferParameters = TransferParameters(self.transferAmount.get(), self.transferTo)
         
         for pot in self.potsWidgets:
             transferParameters.addPot(pot.getSelectedName(), pot.getDoubleValue())
@@ -278,10 +281,13 @@ class PotsEnvelopeTransferApp:
         
         transferProcessor = TransferProcessor(transferParameters, self.potsSpreadsheet, self.envelopesSpreadsheet)
         transferProcessor.processTransfer()
+        
+        #After you process, clear the transfer classes for a fresh start next time.
+        transferParameters = None
+        transferProcessor = None
 
     #This method sets color and state for different widgets based on whether or not the 
     #transfer is ready for execution.
-    
     def setReadyForExecuteState(self):
         #If there's a non-zero transfer amount, and the pots and envelopes add up to that amount
         #(i.e. there's nothing left to take from/allocate to them), then it's ready for execution
