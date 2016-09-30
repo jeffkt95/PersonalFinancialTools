@@ -16,7 +16,7 @@ class TransferParameters:
     def addPot(self, name, value):
         self.pots.append(Envelope(name, value))
         
-    def getPotsToEnvelopesBool():
+    def getPotsToEnvelopesBool(self):
         return self.potsToEnvelopes
     
     def __str__(self):

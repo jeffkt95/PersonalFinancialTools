@@ -23,7 +23,7 @@ class PotsEnvelopeTransferApp:
         
         # Row 0 ##################################################################
         mainFrameRow = 0
-        topLabel = Label(frame, text="Pots -> Envelopes Transfer")
+        topLabel = Label(frame, text="Pots / Envelopes Transfer")
         topLabel.grid(row=mainFrameRow, column=0, columnspan=2)
         
         # Row 1 ##################################################################
@@ -48,24 +48,31 @@ class PotsEnvelopeTransferApp:
         fromPotFrame = Frame(frame)
         fromPotFrame.grid(row=mainFrameRow, column=0)
         
-        fromEnvelopeFrame = Frame(frame)
-        fromEnvelopeFrame.grid(row=mainFrameRow, column=1)
-        
         fromSavingsPotsLabel = Label(fromPotFrame, text="From savings pots")
         fromSavingsPotsLabel.grid(row=0, column=0)
-        
-        toCheckingEnvelopesLabel = Label(fromEnvelopeFrame, text="To checking envelopes")
-        toCheckingEnvelopesLabel.grid(row=0, column=0)
         
         addPotButton = Button(fromPotFrame, text="+", command=self.addPot)
         addPotButton.grid(row=0, column=1, sticky=E)        
         
-        addEnvelopeButton = Button(fromEnvelopeFrame, text="+", command=self.addEnvelope)
-        addEnvelopeButton.grid(row=0, column=1, sticky=E)        
-        
         removePotButton = Button(fromPotFrame, text="-", command=self.removePot)
         removePotButton.grid(row=0, column=2, sticky=E)
         self.removePotButton = removePotButton
+        
+        transferDirectionFrame = Frame(frame)
+        transferDirectionFrame.grid(row=mainFrameRow, column=1)
+        
+        transferDirectionButton = Button(transferDirectionFrame, text="->", command=self.changeTransferDirection)
+        transferDirectionButton.grid(row=0, column=0)        
+        self.transferDirectionButton = transferDirectionButton
+        
+        fromEnvelopeFrame = Frame(frame)
+        fromEnvelopeFrame.grid(row=mainFrameRow, column=2)
+        
+        toCheckingEnvelopesLabel = Label(fromEnvelopeFrame, text="To checking envelopes")
+        toCheckingEnvelopesLabel.grid(row=0, column=0)
+        
+        addEnvelopeButton = Button(fromEnvelopeFrame, text="+", command=self.addEnvelope)
+        addEnvelopeButton.grid(row=0, column=1, sticky=E)        
         
         removeEnvelopeButton = Button(fromEnvelopeFrame, text="-", command=self.removeEnvelope)
         removeEnvelopeButton.grid(row=0, column=2, sticky=E)        
@@ -78,7 +85,7 @@ class PotsEnvelopeTransferApp:
         self.potFrame.grid(row=mainFrameRow, column=0, sticky=N)
         
         self.envelopeFrame = Frame(frame)
-        self.envelopeFrame.grid(row=mainFrameRow, column=1, sticky=N)
+        self.envelopeFrame.grid(row=mainFrameRow, column=2, sticky=N)
         
         # Add one each to start
         self.addPot()
@@ -147,11 +154,6 @@ class PotsEnvelopeTransferApp:
         self.potsSpreadsheet = PotsSpreadsheet()
         self.potsSpreadsheet.connect()
         self.potsList = self.potsSpreadsheet.getPotsList()
-        
-        #I've got this sitting here to do some testing right now. I really don't do this until okClicked
-        transferProcessor = TransferProcessor(None, self.potsSpreadsheet, self.envelopesSpreadsheet)
-        transferProcessor.processTransfer()
-
         
     def addPot(self):
         potOneVariable = StringVar(self.master)
@@ -253,8 +255,8 @@ class PotsEnvelopeTransferApp:
         print("Finished getting transferParameters from UI")
         print(transferParameters)
         
-        processParameters = ProcessParameters(transferParameters, self.potsSpreadsheet, self.envelopesSpreadsheet)
-        processParameters.processTransfer()
+        transferProcessor = TransferProcessor(transferParameters, self.potsSpreadsheet, self.envelopesSpreadsheet)
+        transferProcessor.processTransfer()
 
     def cancelClicked(self):
         print("TODO: implement cancelClicked")
@@ -320,7 +322,10 @@ class PotsEnvelopeTransferApp:
         except:
             print("Exception, transferAmountChanged")
             pass
-         
+        
+    def changeTransferDirection(self):
+        print("Hello")
+    
 def main():
     root = Tk()
     app = PotsEnvelopeTransferApp(root)

@@ -45,6 +45,49 @@ Left to take from pots:  |   Left to allocate to envelopes:
      OK                           Cancel
 (The OK button will be disabled until the pots and envelopes totals match the transfer amount.)
 ```
+### Design: Tables and Named Ranges
+I need to be able to find names in a table, then to that row, set the value in an another column.
+The google api doesn't give a straightforward way of doing that. There's no "match" function that
+is part of the API. What I did in the envelopes implementation is set all the values, leaving empty
+the ones I didn't have. This is what is wanted in envelopes, but pots is different. I only want
+to change the ones I have values for.
+
+So I need to do a "get" for the whole table, then when I find the row, offset over and set the value for that
+same row. There's a couple ways I can think of doing this.
+
+1. Just do the request based on a hard-coded range in the code, not with a named range. There's difficulties with 
+using a named range, and I ultimately need spreadsheet knowledge in the code. So I might as well just hard-code that in,
+and use that knowledge to offset to the column I'm setting
+2. Use a named range for the row keys (e.g. envelope names), and a separate named range for the row values. This way I know
+the column. I'll have to get the range address to figure out which row the data is actually in. Then I'll set the data, not 
+using the named range, but using the column letter I get from the named range, and the row number I can determine from the 
+keys address row and the number in the array.
+So for example:
+    a. get potNames table
+    b. Get the potNames address. Extract the starting row.
+    c. find Car pot in table. Save the row I found it in
+    d. rowForValue = starting row + row found
+    e. Get pot values address. Extract the column.
+    f. Set the pot value in cell (column from step E)(row from step D)
+So complicated and hacky!
+3. In the spreadsheet classes, just have the following variables:
+
+tableKeyColumn = <column letter>
+tableValueColumn = <column letter>
+tableStartRow = <row number>
+tableEndRow = <row number>
+tableSheetName = <string>
+
+That fully defines the spreadsheet table! Whether or not you hard-code those values, or get them from the spreadsheet with named ranges,
+I think having variables for these is necessary. So assuming you have those values ready:
+    a. get data from 'tableSheetName'! + tableKeyColumn + tableStartRow + ":" + tableKeyColumn + tableEndRow
+    b. Find Car pot in data returned from step a. Save the row it was found in.
+    c. rowForValue = tableStartRow + row found
+    d. set the pot value in cell 'tableSheetName'! + tableValueColumn + ":" + rowForValue
+
+I like the idea of determining the table variables (tableKeyColumn, tableStartRow, etc.) one time based on named ranges, then not
+using the named ranges again. Assuming I don't just use the hard codes. Start with the hard codes, then decide if you want
+to determine the table variables from named ranges.
 
 # TODO
 * Implement the GUI
@@ -71,3 +114,4 @@ Left to take from pots:  |   Left to allocate to envelopes:
   * In the envelopes spreadsheet
     * Increase the total at the top
     * Adjust the envelopes based on the inputs
+
