@@ -8,6 +8,9 @@ from TransferProcessor import TransferProcessor
 class PotsEnvelopeTransferApp:
     envelopeLastRow = 0
     potLastRow = 0
+    totalGridWidth = 2
+    
+    transferDirectionPotsToEnvelopes = True
     
     potsWidgets = []
     envelopesWidgets = []
@@ -24,7 +27,7 @@ class PotsEnvelopeTransferApp:
         # Row 0 ##################################################################
         mainFrameRow = 0
         topLabel = Label(frame, text="Pots / Envelopes Transfer")
-        topLabel.grid(row=mainFrameRow, column=0, columnspan=2)
+        topLabel.grid(row=mainFrameRow, column=0, columnspan=self.totalGridWidth)
         
         # Row 1 ##################################################################
         mainFrameRow += 1
@@ -41,38 +44,38 @@ class PotsEnvelopeTransferApp:
         # Row 2 ##################################################################
         mainFrameRow += 1
         separatorLabel = Label(frame, text="_________________________________________________________________________")
-        separatorLabel.grid(row=mainFrameRow, column=0, columnspan=2)
+        separatorLabel.grid(row=mainFrameRow, column=0, columnspan=self.totalGridWidth)
 
         # Row 3 ##################################################################
         mainFrameRow += 1
         fromPotFrame = Frame(frame)
         fromPotFrame.grid(row=mainFrameRow, column=0)
         
-        fromSavingsPotsLabel = Label(fromPotFrame, text="From savings pots")
-        fromSavingsPotsLabel.grid(row=0, column=0)
+        self.fromSavingsPotsLabel = Label(fromPotFrame, text="From savings pots")
+        self.fromSavingsPotsLabel.grid(row=0, column=0)
         
         addPotButton = Button(fromPotFrame, text="+", command=self.addPot)
-        addPotButton.grid(row=0, column=1, sticky=E)        
+        addPotButton.grid(row=0, column=1)        
         
         removePotButton = Button(fromPotFrame, text="-", command=self.removePot)
-        removePotButton.grid(row=0, column=2, sticky=E)
+        removePotButton.grid(row=0, column=2)
         self.removePotButton = removePotButton
         
-        transferDirectionFrame = Frame(frame)
-        transferDirectionFrame.grid(row=mainFrameRow, column=1)
+        #transferDirectionFrame = Frame(frame)
+        #transferDirectionFrame.grid(row=mainFrameRow, column=1)
         
-        transferDirectionButton = Button(transferDirectionFrame, text="->", command=self.changeTransferDirection)
-        transferDirectionButton.grid(row=0, column=0)        
+        transferDirectionButton = Button(fromPotFrame, text="->", command=self.changeTransferDirection)
+        transferDirectionButton.grid(row=0, column=3)        
         self.transferDirectionButton = transferDirectionButton
         
         fromEnvelopeFrame = Frame(frame)
-        fromEnvelopeFrame.grid(row=mainFrameRow, column=2)
+        fromEnvelopeFrame.grid(row=mainFrameRow, column=1)
         
-        toCheckingEnvelopesLabel = Label(fromEnvelopeFrame, text="To checking envelopes")
-        toCheckingEnvelopesLabel.grid(row=0, column=0)
+        self.toCheckingEnvelopesLabel = Label(fromEnvelopeFrame, text="To checking envelopes")
+        self.toCheckingEnvelopesLabel.grid(row=0, column=0)
         
         addEnvelopeButton = Button(fromEnvelopeFrame, text="+", command=self.addEnvelope)
-        addEnvelopeButton.grid(row=0, column=1, sticky=E)        
+        addEnvelopeButton.grid(row=0, column=1)        
         
         removeEnvelopeButton = Button(fromEnvelopeFrame, text="-", command=self.removeEnvelope)
         removeEnvelopeButton.grid(row=0, column=2, sticky=E)        
@@ -85,7 +88,7 @@ class PotsEnvelopeTransferApp:
         self.potFrame.grid(row=mainFrameRow, column=0, sticky=N)
         
         self.envelopeFrame = Frame(frame)
-        self.envelopeFrame.grid(row=mainFrameRow, column=2, sticky=N)
+        self.envelopeFrame.grid(row=mainFrameRow, column=1, sticky=N)
         
         # Add one each to start
         self.addPot()
@@ -94,7 +97,7 @@ class PotsEnvelopeTransferApp:
         # Row ##################################################################
         mainFrameRow += 1
         separatorLabel2 = Label(frame, text="_________________________________________________________________________")
-        separatorLabel2.grid(row=mainFrameRow, column=0, columnspan=2)
+        separatorLabel2.grid(row=mainFrameRow, column=0, columnspan=self.totalGridWidth)
 
         # Row ##################################################################
         # This row has a frame for the envelopes and a frame for the pots
@@ -324,8 +327,17 @@ class PotsEnvelopeTransferApp:
             pass
         
     def changeTransferDirection(self):
-        print("Hello")
-    
+        if (self.transferDirectionPotsToEnvelopes == True):
+            self.transferDirectionPotsToEnvelopes = False
+            self.transferDirectionButton["text"] = "<-"
+            self.fromSavingsPotsLabel["text"] = "To savings pots"
+            self.toCheckingEnvelopesLabel["text"] = "From savings pots"
+        else:
+            self.transferDirectionPotsToEnvelopes = True
+            self.transferDirectionButton["text"] = "->"
+            self.fromSavingsPotsLabel["text"] = "From savings pots"
+            self.toCheckingEnvelopesLabel["text"] = "To savings pots"
+            
 def main():
     root = Tk()
     app = PotsEnvelopeTransferApp(root)
