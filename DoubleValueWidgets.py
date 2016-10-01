@@ -1,13 +1,17 @@
 #This class represents a double and some associated widgets 
 
 class DoubleValueWidgets:
-    def __init__(self, option, entry, doubleVariable):
+    def __init__(self, option, nameVariable, entry, doubleVariable):
         self.option = option
+        self.nameVariable = nameVariable
         self.entry = entry
         self.doubleVariable = doubleVariable
         
-    def getDouble(self):
+    def getDoubleValue(self):
         return self.doubleVariable.get()
+        
+    def getSelectedName(self):
+        return self.nameVariable.get()
         
     def removeWidgets(self):
         self.option.grid_remove()

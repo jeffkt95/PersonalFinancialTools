@@ -1,3 +1,4 @@
+#This class says is called envelope, but it could also represent a pot.
 class Envelope:
     
     def __init__(self, name, amountSpent):

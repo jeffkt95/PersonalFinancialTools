@@ -45,18 +45,67 @@ Left to take from pots:  |   Left to allocate to envelopes:
      OK                           Cancel
 (The OK button will be disabled until the pots and envelopes totals match the transfer amount.)
 ```
+### Design: Tables and Named Ranges
+I need to be able to find names in a table, then to that row, set the value in an another column.
+The google api doesn't give a straightforward way of doing that. There's no "match" function that
+is part of the API. What I did in the envelopes implementation is set all the values, leaving empty
+the ones I didn't have. This is what is wanted in envelopes, but pots is different. I only want
+to change the ones I have values for.
+
+So I need to do a "get" for the whole table, then when I find the row, offset over and set the value for that
+same row. There's a couple ways I can think of doing this.
+
+1. Just do the request based on a hard-coded range in the code, not with a named range. There's difficulties with 
+using a named range, and I ultimately need spreadsheet knowledge in the code. So I might as well just hard-code that in,
+and use that knowledge to offset to the column I'm setting
+2. Use a named range for the row keys (e.g. envelope names), and a separate named range for the row values. This way I know
+the column. I'll have to get the range address to figure out which row the data is actually in. Then I'll set the data, not 
+using the named range, but using the column letter I get from the named range, and the row number I can determine from the 
+keys address row and the number in the array.
+So for example:
+    a. get potNames table
+    b. Get the potNames address. Extract the starting row.
+    c. find Car pot in table. Save the row I found it in
+    d. rowForValue = starting row + row found
+    e. Get pot values address. Extract the column.
+    f. Set the pot value in cell (column from step E)(row from step D)
+So complicated and hacky!
+3. In the spreadsheet classes, just have the following variables:
+
+tableKeyColumn = <column letter>
+tableValueColumn = <column letter>
+tableStartRow = <row number>
+tableEndRow = <row number>
+tableSheetName = <string>
+
+That fully defines the spreadsheet table! Whether or not you hard-code those values, or get them from the spreadsheet with named ranges,
+I think having variables for these is necessary. So assuming you have those values ready:
+    a. get data from 'tableSheetName'! + tableKeyColumn + tableStartRow + ":" + tableKeyColumn + tableEndRow
+    b. Find Car pot in data returned from step a. Save the row it was found in.
+    c. rowForValue = tableStartRow + row found
+    d. set the pot value in cell 'tableSheetName'! + tableValueColumn + ":" + rowForValue
+
+I like the idea of determining the table variables (tableKeyColumn, tableStartRow, etc.) one time based on named ranges, then not
+using the named ranges again. Assuming I don't just use the hard codes. Start with the hard codes, then decide if you want
+to determine the table variables from named ranges.
 
 # TODO
 * Implement the GUI
   * DONE Adding new spots for pots/envelopes. By default there will only be one
   * DONE Modifying totals based on user input
   * DONE Add ability to remove spots for pots/envelopes. Just remove the bottom one. You have to remove it from the UI and the array/list.
-  * Enable/disable OK button based on totals matching. 
-  * Do some green/red color coding based on whent the totals match and are ready to go.
-  * Fill pulldown options with envelopes/pots
+  * DONE Enable/disable OK button based on totals matching. 
+  * DONE Do some green/red color coding based on whent the totals match and are ready to go.
+  * DONE Fill pulldown options with envelopes/pots
+    * Done, except hidden rows are killing me. No API for this. Try adapting this workaround to the python API: https://code.google.com/p/google-apps-script-issues/issues/detail?id=195#c50
+    * Since API doesn't support querying if row is hidden, and the workaround is a messy hack not even implemented in the python API, I'll instead move the hidden rows below the unhidden ones, and only include the unhidden, active rows in the named range.
+      * Do this for both the test spreadsheet and the real one.
+  * I had to change some of the classes that the other app uses, "Copy Quicken into spreadsheet" app. I need to test that I didn't break anything.
+  * Add buttons to launch the pots and envelope spreadsheets
+  * DONE Add space/buffer between the pots and envelope columns
 * Implement classes required for back-end code.
-  * Envelopes. Parse the envelopes spreadsheet and store them. (I alreaady have code to do this.)
-  * Pots. Parse the pots spreadsheet and store them. Will be very similar to the envelopes code I already implemented this.
+  * Envelopes. An array of objects with the values put in the GUI
+  * Pots. An array of objects with the values put in the GUI
 * Execute the transfer.
   * In pots spreadsheet:
     * Add a column, copy previous
@@ -65,3 +114,4 @@ Left to take from pots:  |   Left to allocate to envelopes:
   * In the envelopes spreadsheet
     * Increase the total at the top
     * Adjust the envelopes based on the inputs
+

@@ -5,12 +5,14 @@ from apiclient import discovery
 import oauth2client
 from oauth2client import client
 from oauth2client import tools
+import webbrowser
 
 class GoogleSheetInterface:
     #This is the ID of my test spreadsheet right now. Note this ID is simply the URL of the spreadsheet.
     SCOPES = 'https://www.googleapis.com/auth/drive'
     CLIENT_SECRET_FILE = 'client_secret.json'
     APPLICATION_NAME = 'Google Sheets API Python Quickstart'
+    SPREADSHEET_URL_ROOT = 'https://docs.google.com/spreadsheets/d/'
 
     def __init__(self, spreadsheetId):
         self.spreadsheetId = spreadsheetId
@@ -27,9 +29,23 @@ class GoogleSheetInterface:
     #Cell address is of the form "<column letter><row number>", e.g. "A5"
     def getCellValue(self, sheetName, cellAddress):
         fullCellAddress = sheetName + "!" + cellAddress
+        return self.getCellValue(fullCellAddress)
+
+    #Gets the value of a single cell
+    #Cell address is of the form "<column letter><row number>", e.g. "A5"
+    def getCellValue(self, fullCellAddress):
+        print("Going to get " + fullCellAddress)
         result = self.service.spreadsheets().values().get(spreadsheetId=self.spreadsheetId, range=fullCellAddress).execute()
         values = result.get('values', [])
-        return values[0][0]
+        if (len(values) < 1):
+            return None
+        else:
+            return values[0][0]
+
+    def getCellAddress(self, sheetName, column, row):
+        address = "'" + sheetName + "'!"
+        address = address + column + str(row)
+        return address
 
     #Gets the value of a single cell with a named range
     def getCellValueNamedRange(self, namedRange):
@@ -37,15 +53,23 @@ class GoogleSheetInterface:
         values = result.get('values', [])
         return values[0][0]
 
+    def openSpreadsheet(self):
+        spreadsheetUrl = self.SPREADSHEET_URL_ROOT + self.spreadsheetId
+        webbrowser.open(spreadsheetUrl)
+        
     #Sets the value of a single cell
     #Cell address is of the form "<column letter><row number>", e.g. "A5"
     def setCellValue(self, sheetName, cellAddress, value):
         fullCellAddress = sheetName + "!" + cellAddress
+        self.setCellValue(cellAddress, value)
+    
+    #Sets the value of a single cell
+    #Cell address is of the form "<column letter><row number>", e.g. "A5"
+    def setCellValue(self, fullCellAddress, value):
         myBody = {u'range': fullCellAddress, u'values': [[str(value)]], u'majorDimension': u'ROWS'}
         result = self.service.spreadsheets().values().update(
             spreadsheetId=self.spreadsheetId, range=fullCellAddress, body=myBody, valueInputOption='USER_ENTERED').execute()
-    
-    
+     
     def get_credentials(self):
         """Gets valid user credentials from storage.
 
