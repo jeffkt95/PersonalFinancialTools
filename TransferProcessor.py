@@ -3,10 +3,10 @@ from TransferParameters import TransferParameters
 #This class takes in all the data required to do the transfer. The class also has the logic
 # to actually perform the transfer.
 class TransferProcessor:
-    def __init__(self, transferParameters, potsSpreadsheet, envelopesSpreadsheet):
+    def __init__(self, transferParameters, potsTable, envelopesTable):
         self.transferParameters = transferParameters
-        self.potsSpreadsheet = potsSpreadsheet
-        self.envelopesSpreadsheet = envelopesSpreadsheet
+        self.mPotsTable = potsTable
+        self.mEnvelopesTable = envelopesTable
         
     def processTransfer(self):
         self.processPots()
@@ -21,7 +21,7 @@ class TransferProcessor:
             
         for pot in self.transferParameters.pots:
             print("Adding to pot " + pot.getName())
-            self.potsSpreadsheet.addToPot(pot.getName(), pot.getAmountSpent() * factor)
+            self.mPotsTable.addToTableRow(pot.getName(), pot.getAmountSpent() * factor)
     
     def processEnvelopes(self):
         #If going from pots to envelopes, then envelope values should be multiplied by 1, so you're adding the amount
@@ -32,5 +32,5 @@ class TransferProcessor:
             
         for envelope in self.transferParameters.envelopes:
             print("Adding to envelope " + envelope.getName())
-            self.envelopesSpreadsheet.addToEnvelope(envelope.getName(), envelope.getAmountSpent() * factor)
+            self.mEnvelopesTable.addToTableRow(envelope.getName(), envelope.getAmountSpent() * factor)
                         

@@ -101,17 +101,19 @@ to determine the table variables from named ranges.
     * Since API doesn't support querying if row is hidden, and the workaround is a messy hack not even implemented in the python API, I'll instead move the hidden rows below the unhidden ones, and only include the unhidden, active rows in the named range.
       * Do this for both the test spreadsheet and the real one.
   * I had to change some of the classes that the other app uses, "Copy Quicken into spreadsheet" app. I need to test that I didn't break anything.
-  * Add buttons to launch the pots and envelope spreadsheets
+  * DONE Add buttons to launch the pots and envelope spreadsheets
   * DONE Add space/buffer between the pots and envelope columns
-* Implement classes required for back-end code.
+* DONE Implement classes required for back-end code.
   * Envelopes. An array of objects with the values put in the GUI
   * Pots. An array of objects with the values put in the GUI
 * Execute the transfer.
   * In pots spreadsheet:
     * Add a column, copy previous
     * Decrement the savings balance by the transfer amount
-    * Adjust the pots based on the inputs
+    * DONE Adjust the pots based on the inputs
   * In the envelopes spreadsheet
     * Increase the total at the top
-    * Adjust the envelopes based on the inputs
-
+    * DONE Adjust the envelopes based on the inputs
+* Random tasks
+  * Handle rounding error. Round to nearest cent, particularly on the total check
+  * Unit testing! Create a test spreadsheet for all the spreadsheet and table functions. Write some unit tests to get and set values in it.

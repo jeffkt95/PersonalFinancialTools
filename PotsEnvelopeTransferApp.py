@@ -168,11 +168,11 @@ class PotsEnvelopeTransferApp:
     def initSpreadsheets(self):
         self.envelopesSpreadsheet = EnvelopesSpreadsheet()
         self.envelopesSpreadsheet.connect()
-        self.envelopeList = self.envelopesSpreadsheet.getEnvelopeList()
+        self.envelopeList = self.envelopesSpreadsheet.getEnvelopesTable().getKeysList()
         
         self.potsSpreadsheet = PotsSpreadsheet()
         self.potsSpreadsheet.connect()
-        self.potsList = self.potsSpreadsheet.getPotsList()
+        self.potsList = self.potsSpreadsheet.getPotsTable().getKeysList()
         
     def addPot(self):
         potOneVariable = StringVar(self.master)
@@ -279,7 +279,8 @@ class PotsEnvelopeTransferApp:
         print("Finished getting transferParameters from UI")
         print(transferParameters)
         
-        transferProcessor = TransferProcessor(transferParameters, self.potsSpreadsheet, self.envelopesSpreadsheet)
+        transferProcessor = TransferProcessor(transferParameters, self.potsSpreadsheet.getPotsTable(), 
+                self.envelopesSpreadsheet.getEnvelopesTable())
         transferProcessor.processTransfer()
         
         #After you process, clear the transfer classes for a fresh start next time.

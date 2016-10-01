@@ -1,4 +1,5 @@
 from GoogleSheetInterface import GoogleSheetInterface
+from GoogleSheetsTable import GoogleSheetsTable
 import Utilities
 
 class EnvelopesSpreadsheet(GoogleSheetInterface):
@@ -11,6 +12,10 @@ class EnvelopesSpreadsheet(GoogleSheetInterface):
 
     def __init__(self):
         GoogleSheetInterface.__init__(self, self.TEST_SPREADSHEET_ID)
+        self.mEnvelopesTable = GoogleSheetsTable(self, "A", "B", 3, 32, "Current period")
+        
+    def getEnvelopesTable(self):
+        return self.mEnvelopesTable
         
     def loadEnvelopeData(self):
         result = self.service.spreadsheets().values().get(spreadsheetId=self.spreadsheetId, 
@@ -57,21 +62,6 @@ class EnvelopesSpreadsheet(GoogleSheetInterface):
             print("     Try visually comparing the Quicken report to the envelope spreadsheet.")
             print("     And report the problem to Jeff.")
             print("")
-                  
-    def getEnvelopeList(self):
-        envelopeList = []
-
-        result = self.loadEnvelopeData()
-        envelopeData = result.get('values', [])
-        
-        if not envelopeData:
-            print("There was a problem getting envelope data from the spreadsheet. It returned null.")
-            return
-
-        for i in range(0, len(envelopeData)):
-            envelopeList.append(envelopeData[i][0])
-            
-        return envelopeList
         
     #This method takes in the envelopeData, finds the particular envelope, then sets the data
     def setEnvelopeInSpreadsheet(self, envelope, envelopeData, amountSpent):

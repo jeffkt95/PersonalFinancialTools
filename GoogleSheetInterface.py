@@ -27,6 +27,11 @@ class GoogleSheetInterface:
         self.service = discovery.build('sheets', 'v4', http=http,
                                   discoveryServiceUrl=discoveryUrl)
         
+    def getResultsSet(self, queryRange):
+        result = self.service.spreadsheets().values().get(spreadsheetId=self.spreadsheetId, 
+                                                            range=queryRange).execute()
+        return result
+        
     #Gets the value of a single cell
     #Cell address is of the form "<column letter><row number>", e.g. "A5"
     def getCellValue(self, sheetName, cellAddress):
