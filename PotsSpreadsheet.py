@@ -1,5 +1,4 @@
 from GoogleSheetInterface import GoogleSheetInterface
-import Utilities
 
 class PotsSpreadsheet(GoogleSheetInterface):
     #This is the ID of my test spreadsheet right now. Note this ID is simply the URL of the spreadsheet.
@@ -53,24 +52,7 @@ class PotsSpreadsheet(GoogleSheetInterface):
             
         #Get the value
         potValueCellAddress = self.getCellAddress(self.mTableSheetName, self.mTableValueColumn, rowIndex)
-        originalPotValue = self.getCellValue(potValueCellAddress)
-        
-        if (originalPotValue == None):
-            originalPotValue = 0
-        
-        if (Utilities.is_number(originalPotValue) == False):
-            originalPotValue = Utilities.getNumber(originalPotValue)
-        else:
-            originalPotValue = float(originalPotValue)
-        
-        if (Utilities.is_number(amountToAdd) == False):
-            amountToAdd = Utilities.getNumber(amountToAdd)
-        else:
-            amountToAdd = float(amountToAdd)
-                    
-        #Set the value to the retrieved value plus the amountToAdd
-        newPotValue = originalPotValue + amountToAdd
-        self.setCellValue(potValueCellAddress, str(newPotValue))
+        self.addToCell(potValueCellAddress, amountToAdd)
         
     def getPotsList(self):
         potsList = []

@@ -6,6 +6,8 @@ import oauth2client
 from oauth2client import client
 from oauth2client import tools
 import webbrowser
+import Utilities
+
 
 class GoogleSheetInterface:
     #This is the ID of my test spreadsheet right now. Note this ID is simply the URL of the spreadsheet.
@@ -69,7 +71,27 @@ class GoogleSheetInterface:
         myBody = {u'range': fullCellAddress, u'values': [[str(value)]], u'majorDimension': u'ROWS'}
         result = self.service.spreadsheets().values().update(
             spreadsheetId=self.spreadsheetId, range=fullCellAddress, body=myBody, valueInputOption='USER_ENTERED').execute()
-     
+    
+    def addToCell(self, cellAddress, amountToAdd):
+        originalPotValue = self.getCellValue(cellAddress)
+        
+        if (originalPotValue == None):
+            originalPotValue = 0
+        
+        if (Utilities.is_number(originalPotValue) == False):
+            originalPotValue = Utilities.getNumber(originalPotValue)
+        else:
+            originalPotValue = float(originalPotValue)
+        
+        if (Utilities.is_number(amountToAdd) == False):
+            amountToAdd = Utilities.getNumber(amountToAdd)
+        else:
+            amountToAdd = float(amountToAdd)
+                    
+        #Set the value to the retrieved value plus the amountToAdd
+        newPotValue = originalPotValue + amountToAdd
+        self.setCellValue(cellAddress, str(newPotValue))
+    
     def get_credentials(self):
         """Gets valid user credentials from storage.
 
