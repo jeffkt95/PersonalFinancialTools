@@ -31,7 +31,7 @@ class GoogleSheetInterface:
         result = self.service.spreadsheets().values().get(spreadsheetId=self.spreadsheetId, 
                                                             range=queryRange).execute()
         return result
-        
+            
     #Gets the value of a single cell
     #Cell address is of the form "<column letter><row number>", e.g. "A5"
     def getCellValue(self, sheetName, cellAddress):
@@ -76,7 +76,51 @@ class GoogleSheetInterface:
         myBody = {u'range': fullCellAddress, u'values': [[str(value)]], u'majorDimension': u'ROWS'}
         result = self.service.spreadsheets().values().update(
             spreadsheetId=self.spreadsheetId, range=fullCellAddress, body=myBody, valueInputOption='USER_ENTERED').execute()
+        
+    def copyPasteColumn(self, worksheetName, sourceColumn, destinationColumn):
+        worksheetId = self.getWorksheetIdByName(worksheetName)
+        
+        myBody = {u'requests': [
+        {
+            u'copyPaste': {
+                u'source': {
+                    u'sheetId': str(worksheetId),
+                    u'startRowIndex': str(0),
+                    u'startColumnIndex': str(sourceColumn),
+                    u'endColumnIndex': str(sourceColumn + 1)
+                },
+                u'destination': {
+                    u'sheetId': str(worksheetId),
+                    u'startRowIndex': str(0),       #Leave out endRowIndex to include all rows
+                    u'startColumnIndex': str(destinationColumn),
+                    u'endColumnIndex': str(destinationColumn + 1)
+                }
+            }
+        }
+        ]}
+
+        self.service.spreadsheets().batchUpdate(
+            spreadsheetId=self.spreadsheetId, body=myBody).execute()
     
+    def insertColumn(self, columnIndex, worksheetName):
+        worksheetId = self.getWorksheetIdByName(worksheetName)
+        
+        myBody = {u'requests': [
+        {
+            u'insertDimension': {
+                u'range': {
+                    u'sheetId': str(worksheetId),
+                    u'dimension': u'COLUMNS',
+                    u'startIndex': str(columnIndex),
+                    u'endIndex': str(columnIndex + 1)
+                }
+            }
+        }
+        ]}
+
+        self.service.spreadsheets().batchUpdate(
+            spreadsheetId=self.spreadsheetId, body=myBody).execute()
+        
     def addToCell(self, cellAddress, amountToAdd):
         originalPotValue = self.getCellValue(cellAddress)
         
@@ -96,6 +140,26 @@ class GoogleSheetInterface:
         #Set the value to the retrieved value plus the amountToAdd
         newPotValue = originalPotValue + amountToAdd
         self.setCellValue(cellAddress, str(newPotValue))
+    
+    def getWorksheetIdByName(self, worksheetName):
+        # https://developers.google.com/sheets/samples/sheet#determine_sheet_id_and_other_properties
+        result = self.service.spreadsheets().get(spreadsheetId=self.spreadsheetId, fields='sheets.properties').execute()
+        
+        sheets = result.get('sheets', [])
+
+        for sheetProperties in sheets:
+            theProperties = sheetProperties.get('properties')
+            sheetId = theProperties.get('sheetId')
+            title = theProperties.get('title')
+            if title == worksheetName:
+                print("Found sheetId " + str(sheetId) + " for title " + title)
+                return sheetId
+
+        print("TODO: Need to throw error or something if I don't find it")
+        return -1
+
+        #This didn't work
+        #sheetProperties = values.get('properties', [])
     
     def get_credentials(self):
         """Gets valid user credentials from storage.

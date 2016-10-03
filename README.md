@@ -106,14 +106,17 @@ to determine the table variables from named ranges.
 * DONE Implement classes required for back-end code.
   * Envelopes. An array of objects with the values put in the GUI
   * Pots. An array of objects with the values put in the GUI
-* Execute the transfer.
-  * In pots spreadsheet:
-    * Add a column, copy previous
-    * Decrement the savings balance by the transfer amount
+* DONE Execute the transfer.
+  * DONE In pots spreadsheet:
+    * DONE Add a column, copy previous
+    * DONE Decrement the savings balance by the transfer amount
     * DONE Adjust the pots based on the inputs
-  * In the envelopes spreadsheet
-    * Increase the total at the top
+  * DONE In the envelopes spreadsheet
+    * DONE Increase the total at the top
     * DONE Adjust the envelopes based on the inputs
 * Random tasks
+  * Set date in top row of pots spreadsheet
+  * Clear note in bottom row of pots spreadsheet
+  * Put place in GUI to create a Note, set it in bottom row of spreadsheet
   * Handle rounding error. Round to nearest cent, particularly on the total check
   * Unit testing! Create a test spreadsheet for all the spreadsheet and table functions. Write some unit tests to get and set values in it.

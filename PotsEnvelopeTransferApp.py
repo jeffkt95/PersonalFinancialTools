@@ -279,8 +279,7 @@ class PotsEnvelopeTransferApp:
         print("Finished getting transferParameters from UI")
         print(transferParameters)
         
-        transferProcessor = TransferProcessor(transferParameters, self.potsSpreadsheet.getPotsTable(), 
-                self.envelopesSpreadsheet.getEnvelopesTable())
+        transferProcessor = TransferProcessor(transferParameters, self.potsSpreadsheet, self.envelopesSpreadsheet)
         transferProcessor.processTransfer()
         
         #After you process, clear the transfer classes for a fresh start next time.

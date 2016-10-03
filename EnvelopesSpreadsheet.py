@@ -10,9 +10,13 @@ class EnvelopesSpreadsheet(GoogleSheetInterface):
     ENVELOPE_DATE_NAMED_RANGE = "AllEnvelopeData"
     AMOUNT_SPENT_NAMED_RANGE = "AmountSpent"
 
+    SHEET_NAME = "Current period"
+    #Cell where the savings total is
+    TOTAL_CELL = "B1"
+
     def __init__(self):
         GoogleSheetInterface.__init__(self, self.TEST_SPREADSHEET_ID)
-        self.mEnvelopesTable = GoogleSheetsTable(self, "A", "B", 3, 32, "Current period")
+        self.mEnvelopesTable = GoogleSheetsTable(self, "A", "B", 3, 32, self.SHEET_NAME)
         
     def getEnvelopesTable(self):
         return self.mEnvelopesTable
@@ -21,7 +25,11 @@ class EnvelopesSpreadsheet(GoogleSheetInterface):
         result = self.service.spreadsheets().values().get(spreadsheetId=self.spreadsheetId, 
                                                             range=self.ENVELOPE_DATE_NAMED_RANGE).execute()
         return result
-        
+    
+    def addToTotal(self, amountToAdd):
+        totalCellAddress = "'" + self.SHEET_NAME + "'!" + self.TOTAL_CELL
+        self.addToCell(totalCellAddress, amountToAdd)
+    
     def setEnvelopesInSpreadsheet(self, envelopes):
         result = self.loadEnvelopeData()
         
