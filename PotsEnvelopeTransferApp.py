@@ -168,11 +168,11 @@ class PotsEnvelopeTransferApp:
     def initSpreadsheets(self):
         self.envelopesSpreadsheet = EnvelopesSpreadsheet()
         self.envelopesSpreadsheet.connect()
-        self.envelopeList = self.envelopesSpreadsheet.getEnvelopeList()
+        self.envelopeList = self.envelopesSpreadsheet.getEnvelopesTable().getKeysList()
         
         self.potsSpreadsheet = PotsSpreadsheet()
         self.potsSpreadsheet.connect()
-        self.potsList = self.potsSpreadsheet.getPotsList()
+        self.potsList = self.potsSpreadsheet.getPotsTable().getKeysList()
         
     def addPot(self):
         potOneVariable = StringVar(self.master)

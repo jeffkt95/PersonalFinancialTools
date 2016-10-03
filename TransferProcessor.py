@@ -5,8 +5,10 @@ from TransferParameters import TransferParameters
 class TransferProcessor:
     def __init__(self, transferParameters, potsSpreadsheet, envelopesSpreadsheet):
         self.transferParameters = transferParameters
-        self.potsSpreadsheet = potsSpreadsheet
-        self.envelopesSpreadsheet = envelopesSpreadsheet
+        self.mPotsSpreadsheet = potsSpreadsheet
+        self.mEnvelopesSpreadsheet = envelopesSpreadsheet
+        self.mPotsTable = potsSpreadsheet.getPotsTable()
+        self.mEnvelopesTable = envelopesSpreadsheet.getEnvelopesTable()
         
     def processTransfer(self):
         self.processPots()
@@ -19,9 +21,12 @@ class TransferProcessor:
         else:
             factor = -1
             
+        self.mPotsSpreadsheet.copyPasteShiftPreviousPots()
+        
+        self.mPotsSpreadsheet.addToTotal(self.transferParameters.getTransferAmount() * factor)
+        
         for pot in self.transferParameters.pots:
-            print("Adding to pot " + pot.getName())
-            self.potsSpreadsheet.addToPot(pot.getName(), pot.getAmountSpent() * factor)
+            self.mPotsTable.addToTableRow(pot.getName(), pot.getAmountSpent() * factor)
     
     def processEnvelopes(self):
         #If going from pots to envelopes, then envelope values should be multiplied by 1, so you're adding the amount
@@ -30,7 +35,8 @@ class TransferProcessor:
         else:
             factor = -1
             
+        self.mEnvelopesSpreadsheet.addToTotal(self.transferParameters.getTransferAmount() * factor)
+
         for envelope in self.transferParameters.envelopes:
-            print("Adding to envelope " + envelope.getName())
-            self.envelopesSpreadsheet.addToEnvelope(envelope.getName(), envelope.getAmountSpent() * factor)
+            self.mEnvelopesTable.addToTableRow(envelope.getName(), envelope.getAmountSpent() * factor)
                         

@@ -24,6 +24,9 @@ class TransferParameters:
         
     def getTransferTo(self):
         return self.transferTo
+        
+    def getTransferAmount(self):
+        return self.transferAmount
     
     def __str__(self):
         string = "Transfer, amount: " + str(self.transferAmount) + "\n"
