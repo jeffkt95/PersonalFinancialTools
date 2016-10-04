@@ -100,7 +100,6 @@ to determine the table variables from named ranges.
     * Done, except hidden rows are killing me. No API for this. Try adapting this workaround to the python API: https://code.google.com/p/google-apps-script-issues/issues/detail?id=195#c50
     * Since API doesn't support querying if row is hidden, and the workaround is a messy hack not even implemented in the python API, I'll instead move the hidden rows below the unhidden ones, and only include the unhidden, active rows in the named range.
       * Do this for both the test spreadsheet and the real one.
-  * I had to change some of the classes that the other app uses, "Copy Quicken into spreadsheet" app. I need to test that I didn't break anything.
   * DONE Add buttons to launch the pots and envelope spreadsheets
   * DONE Add space/buffer between the pots and envelope columns
 * DONE Implement classes required for back-end code.
@@ -115,8 +114,12 @@ to determine the table variables from named ranges.
     * DONE Increase the total at the top
     * DONE Adjust the envelopes based on the inputs
 * Random tasks
-  * Set date in top row of pots spreadsheet
-  * Clear note in bottom row of pots spreadsheet
-  * Put place in GUI to create a Note, set it in bottom row of spreadsheet
+  * DONE Set date in top row of pots spreadsheet
+  * DONE Clear note in bottom row of pots spreadsheet
+  * DONE Put place in GUI to create a Note, set it in bottom row of spreadsheet
+  * DONE Re-evaluate the envelope spreadsheet class; all the stuff I had in there before for the previous app. Can I consolidate with new stuff written for this app?
+  * I had to change some of the classes that the other app uses, "Copy Quicken into spreadsheet" app. I need to test that I didn't break anything.
   * Handle rounding error. Round to nearest cent, particularly on the total check
   * Unit testing! Create a test spreadsheet for all the spreadsheet and table functions. Write some unit tests to get and set values in it.
+    * Use python unit testing framework: https://docs.python.org/3.5/library/unittest.html
+  * How about showing what's in the envelope/pot currently (before the transfer) in the UI. Could just show it with a tooltip. Otherwise have to find space for it on UI.

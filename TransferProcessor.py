@@ -25,6 +25,8 @@ class TransferProcessor:
         
         self.mPotsSpreadsheet.addToTotal(self.transferParameters.getTransferAmount() * factor)
         
+        self.mPotsSpreadsheet.setPotsNote(self.transferParameters.getPotsNote())
+        
         for pot in self.transferParameters.pots:
             self.mPotsTable.addToTableRow(pot.getName(), pot.getAmountSpent() * factor)
     

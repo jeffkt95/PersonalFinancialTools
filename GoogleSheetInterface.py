@@ -8,7 +8,6 @@ from oauth2client import tools
 import webbrowser
 import Utilities
 
-
 class GoogleSheetInterface:
     #This is the ID of my test spreadsheet right now. Note this ID is simply the URL of the spreadsheet.
     SCOPES = 'https://www.googleapis.com/auth/drive'
@@ -33,16 +32,13 @@ class GoogleSheetInterface:
         return result
             
     #Gets the value of a single cell
-    #Cell address is of the form "<column letter><row number>", e.g. "A5"
-    def getCellValue(self, sheetName, cellAddress):
-        fullCellAddress = sheetName + "!" + cellAddress
-        return self.getCellValue(fullCellAddress)
-
-    #Gets the value of a single cell
-    #Cell address is of the form "<column letter><row number>", e.g. "A5"
-    def getCellValue(self, fullCellAddress):
-        print("Going to get " + fullCellAddress)
-        result = self.service.spreadsheets().values().get(spreadsheetId=self.spreadsheetId, range=fullCellAddress).execute()
+    #If sheetName is None, the assumption is it's already embedded in the cell address. If not, then the code will concatentate
+    #sheetName and cellAddress to get the full cell address.
+    def getCellValue(self, cellAddress, sheetName = None):
+        if (sheetName is not None):
+            cellAddress = sheetName + "!" + cellAddress
+            
+        result = self.service.spreadsheets().values().get(spreadsheetId=self.spreadsheetId, range=cellAddress).execute()
         values = result.get('values', [])
         if (len(values) < 1):
             return None
@@ -60,23 +56,22 @@ class GoogleSheetInterface:
         values = result.get('values', [])
         return values[0][0]
 
+    #Open up this spreadsheet in a web browser.
     def openSpreadsheet(self):
         spreadsheetUrl = self.SPREADSHEET_URL_ROOT + self.spreadsheetId
         webbrowser.open(spreadsheetUrl)
         
     #Sets the value of a single cell
-    #Cell address is of the form "<column letter><row number>", e.g. "A5"
-    def setCellValue(self, sheetName, cellAddress, value):
-        fullCellAddress = sheetName + "!" + cellAddress
-        self.setCellValue(cellAddress, value)
-    
-    #Sets the value of a single cell
-    #Cell address is of the form "<column letter><row number>", e.g. "A5"
-    def setCellValue(self, fullCellAddress, value):
-        myBody = {u'range': fullCellAddress, u'values': [[str(value)]], u'majorDimension': u'ROWS'}
+    #If sheetName is None, the assumption is its already embedded in the cell address. If not, then the code will concatentate
+    #sheetName and cellAddress to get the full cell address.
+    def setCellValue(self, cellAddress, value, sheetName = None):
+        if (sheetName is not None):
+            cellAddress = sheetName + "!" + cellAddress
+
+        myBody = {u'range': cellAddress, u'values': [[str(value)]], u'majorDimension': u'ROWS'}
         result = self.service.spreadsheets().values().update(
-            spreadsheetId=self.spreadsheetId, range=fullCellAddress, body=myBody, valueInputOption='USER_ENTERED').execute()
-        
+            spreadsheetId=self.spreadsheetId, range=cellAddress, body=myBody, valueInputOption='USER_ENTERED').execute()
+    
     def copyPasteColumn(self, worksheetName, sourceColumn, destinationColumn):
         worksheetId = self.getWorksheetIdByName(worksheetName)
         
@@ -121,6 +116,25 @@ class GoogleSheetInterface:
         self.service.spreadsheets().batchUpdate(
             spreadsheetId=self.spreadsheetId, body=myBody).execute()
         
+    def deleteColumn(self, columnIndex, worksheetName):
+        worksheetId = self.getWorksheetIdByName(worksheetName)
+        
+        myBody = {u'requests': [
+        {
+            u'deleteDimension': {
+                u'range': {
+                    u'sheetId': str(worksheetId),
+                    u'dimension': u'COLUMNS',
+                    u'startIndex': str(columnIndex),
+                    u'endIndex': str(columnIndex + 1)
+                }
+            }
+        }
+        ]}
+
+        self.service.spreadsheets().batchUpdate(
+            spreadsheetId=self.spreadsheetId, body=myBody).execute()
+        
     def addToCell(self, cellAddress, amountToAdd):
         originalPotValue = self.getCellValue(cellAddress)
         
@@ -149,17 +163,27 @@ class GoogleSheetInterface:
 
         for sheetProperties in sheets:
             theProperties = sheetProperties.get('properties')
-            sheetId = theProperties.get('sheetId')
             title = theProperties.get('title')
             if title == worksheetName:
-                print("Found sheetId " + str(sheetId) + " for title " + title)
-                return sheetId
+                return theProperties.get('sheetId')
 
-        print("TODO: Need to throw error or something if I don't find it")
-        return -1
+        raise SheetNotFoundError(worksheetName, "getWorksheetIdByName, sheet '" + worksheetName + "' not found.")
+    
+    def getNumRowsInWorksheet(self, worksheetName):
+        # https://developers.google.com/sheets/samples/sheet#determine_sheet_id_and_other_properties
+        result = self.service.spreadsheets().get(spreadsheetId=self.spreadsheetId, fields='sheets.properties').execute()
+        
+        sheets = result.get('sheets', [])
 
-        #This didn't work
-        #sheetProperties = values.get('properties', [])
+        for sheetProperties in sheets:
+            theProperties = sheetProperties.get('properties')
+            title = theProperties.get('title')
+            if title == worksheetName:
+                gridProperties = theProperties.get('gridProperties')
+                rowCount = gridProperties.get('rowCount')
+                return rowCount
+
+        raise SheetNotFoundError(worksheetName, "getNumRowsInWorksheet, sheet '" + worksheetName + "' not found.")
     
     def get_credentials(self):
         """Gets valid user credentials from storage.
@@ -189,3 +213,15 @@ class GoogleSheetInterface:
             #    credentials = tools.run(flow, store)
             print('Storing credentials to ' + credential_path)
         return credentials
+        
+class SheetNotFoundError(Exception):
+    """Exception raised when a sheet is not found.
+
+    Attributes:
+        sheetName -- Name of sheet not found
+        message -- explanation of the error
+    """
+
+    def __init__(self, sheetName, message):
+        self.sheetName = sheetName
+        self.message = message

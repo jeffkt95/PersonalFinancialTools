@@ -10,6 +10,7 @@ class PotsEnvelopeTransferApp:
     potLastRow = 0
     totalGridWidth = 2
     
+    APPLICATION_NAME = "Pots/Envelopes Transfers"
     ENVELOPES = "Envelopes"
     POTS = "Pots"
     PotsEnvelopesEnumerate = [ENVELOPES, POTS]
@@ -23,6 +24,7 @@ class PotsEnvelopeTransferApp:
         #Init the google spreadsheet
         self.initSpreadsheets()
         self.master = master
+        master.title(self.APPLICATION_NAME)
                 
         frame = Frame(master)
         frame.pack()
@@ -153,6 +155,18 @@ class PotsEnvelopeTransferApp:
         leftToTakeFromEnvelopesLabelAmount = Label(totalEnvelopesFrame, text="0", textvariable=self.leftToTakeFromEnvelopes)
         leftToTakeFromEnvelopesLabelAmount.grid(row=innerFrameRow, column=1)
         self.leftToTakeFromEnvelopesLabelAmount = leftToTakeFromEnvelopesLabelAmount
+        
+        innerFrameRow += 1
+        noteBoxLabel = Label(totalPotsFrame, text="Note for transfer:")
+        noteBoxLabel.grid(row=innerFrameRow, column=0)
+        
+        innerFrameRow +=1
+        #noteVariable = StringVar()
+        #noteVariable.trace("w", lambda name, index, mode,
+        #            noteVariable=noteVariable: self.noteChanged(noteVariable))
+        noteBox = Entry(totalPotsFrame)
+        noteBox.grid(row=innerFrameRow, column=0, columnspan=2)
+        self.noteBox = noteBox
 
         # Row ##################################################################
         mainFrameRow += 1
@@ -268,7 +282,7 @@ class PotsEnvelopeTransferApp:
         transferParameters = None
         transferProcessor = None
 
-        transferParameters = TransferParameters(self.transferAmount.get(), self.transferTo)
+        transferParameters = TransferParameters(self.transferAmount.get(), self.transferTo, self.noteBox.get())
         
         for pot in self.potsWidgets:
             transferParameters.addPot(pot.getSelectedName(), pot.getDoubleValue())
@@ -276,9 +290,6 @@ class PotsEnvelopeTransferApp:
         for envelope in self.envelopesWidgets:
             transferParameters.addEnvelope(envelope.getSelectedName(), envelope.getDoubleValue())
             
-        print("Finished getting transferParameters from UI")
-        print(transferParameters)
-        
         transferProcessor = TransferProcessor(transferParameters, self.potsSpreadsheet, self.envelopesSpreadsheet)
         transferProcessor.processTransfer()
         
@@ -328,7 +339,7 @@ class PotsEnvelopeTransferApp:
                 self.leftToTakeFromEnvelopes.set(transferAmount - totalEnvelopes)
             self.setReadyForExecuteState()
         except:
-            print("Exception, envelopeAmountChanged")
+            #print("Exception, envelopeAmountChanged")
             pass
             
     def potAmountChanged(self, potAmountVariable):
@@ -344,7 +355,7 @@ class PotsEnvelopeTransferApp:
                 self.leftToTakeFromPots.set(transferAmount - totalPots)
             self.setReadyForExecuteState()
         except:
-            print("Exception, potAmountChanged")
+            #print("Exception, potAmountChanged")
             pass
     
     def transferAmountChanged(self, transferAmountVariable):
@@ -353,7 +364,7 @@ class PotsEnvelopeTransferApp:
             self.potAmountChanged(None)
             self.setReadyForExecuteState()
         except:
-            print("Exception, transferAmountChanged")
+            #print("Exception, transferAmountChanged")
             pass
         
     def changeTransferDirection(self):

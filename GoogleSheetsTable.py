@@ -20,7 +20,6 @@ class GoogleSheetsTable():
         if (self.mTableKeys != None):
             return self.mTableKeys
         else:
-            print("For " + self.mTableSheetName + ", got address of " + self.getTableKeysCellAddress())
             result = self.mParentSpreadsheet.getResultsSet(self.getTableKeysCellAddress())
             self.mTableKeys = result.get('values', [])
             return self.mTableKeys
@@ -38,7 +37,6 @@ class GoogleSheetsTable():
         foundRow = False
         #Find the pot row using the name
         for tableKey in tableKeys:
-            print("Checking if " + tableKey[0] + " is the same as " + str(rowName))
             if tableKey[0] == rowName:
                 foundRow = True
                 break

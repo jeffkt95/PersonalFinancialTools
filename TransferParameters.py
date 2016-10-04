@@ -8,10 +8,11 @@ class TransferParameters:
     POTS = "Pots"
     transferTo = ENVELOPES
     
-    def __init__(self, transferAmount, transferTo):
+    def __init__(self, transferAmount, transferTo, potsNote = None):
         #Clear the arrays
         self.envelopes = []
         self.pots = []
+        self.potsNote = potsNote
         
         self.transferAmount = transferAmount
         self.transferTo = transferTo
@@ -27,6 +28,10 @@ class TransferParameters:
         
     def getTransferAmount(self):
         return self.transferAmount
+        
+    #Note that the potsNote could be None if it wasn't specified
+    def getPotsNote(self):
+        return self.potsNote
     
     def __str__(self):
         string = "Transfer, amount: " + str(self.transferAmount) + "\n"
