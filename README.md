@@ -117,8 +117,9 @@ to determine the table variables from named ranges.
   * DONE Set date in top row of pots spreadsheet
   * DONE Clear note in bottom row of pots spreadsheet
   * DONE Put place in GUI to create a Note, set it in bottom row of spreadsheet
-  * Re-evaluate the envelope spreadsheet class; all the stuff I had in there before for the previous app. Can I consolidate with new stuff written for this app?
+  * DONE Re-evaluate the envelope spreadsheet class; all the stuff I had in there before for the previous app. Can I consolidate with new stuff written for this app?
   * I had to change some of the classes that the other app uses, "Copy Quicken into spreadsheet" app. I need to test that I didn't break anything.
   * Handle rounding error. Round to nearest cent, particularly on the total check
   * Unit testing! Create a test spreadsheet for all the spreadsheet and table functions. Write some unit tests to get and set values in it.
-    * Check what unit testing frameworks there are.
+    * Use python unit testing framework: https://docs.python.org/3.5/library/unittest.html
+  * How about showing what's in the envelope/pot currently (before the transfer) in the UI. Could just show it with a tooltip. Otherwise have to find space for it on UI.

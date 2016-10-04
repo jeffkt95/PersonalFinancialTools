@@ -8,7 +8,6 @@ from oauth2client import tools
 import webbrowser
 import Utilities
 
-
 class GoogleSheetInterface:
     #This is the ID of my test spreadsheet right now. Note this ID is simply the URL of the spreadsheet.
     SCOPES = 'https://www.googleapis.com/auth/drive'
