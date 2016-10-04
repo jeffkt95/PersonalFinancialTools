@@ -1,4 +1,5 @@
 from GoogleSheetInterface import GoogleSheetInterface
+from GoogleSheetsTable import GoogleSheetsTable
 import Utilities
 
 class EnvelopesSpreadsheet(GoogleSheetInterface):
@@ -9,12 +10,28 @@ class EnvelopesSpreadsheet(GoogleSheetInterface):
     ENVELOPE_DATE_NAMED_RANGE = "AllEnvelopeData"
     AMOUNT_SPENT_NAMED_RANGE = "AmountSpent"
 
+    SHEET_NAME = "Current period"
+    #Cell where the savings total is
+    TOTAL_CELL = "B1"
+
     def __init__(self):
-        GoogleSheetInterface.__init__(self, self.REAL_SPREADSHEET_ID)
+        GoogleSheetInterface.__init__(self, self.TEST_SPREADSHEET_ID)
+        self.mEnvelopesTable = GoogleSheetsTable(self, "A", "B", 3, 32, self.SHEET_NAME)
         
-    def setEnvelopesInSpreadsheet(self, envelopes):
+    def getEnvelopesTable(self):
+        return self.mEnvelopesTable
+        
+    def loadEnvelopeData(self):
         result = self.service.spreadsheets().values().get(spreadsheetId=self.spreadsheetId, 
                                                             range=self.ENVELOPE_DATE_NAMED_RANGE).execute()
+        return result
+    
+    def addToTotal(self, amountToAdd):
+        totalCellAddress = "'" + self.SHEET_NAME + "'!" + self.TOTAL_CELL
+        self.addToCell(totalCellAddress, amountToAdd)
+    
+    def setEnvelopesInSpreadsheet(self, envelopes):
+        result = self.loadEnvelopeData()
         
         envelopeData = result.get('values', [])
         
@@ -53,7 +70,7 @@ class EnvelopesSpreadsheet(GoogleSheetInterface):
             print("     Try visually comparing the Quicken report to the envelope spreadsheet.")
             print("     And report the problem to Jeff.")
             print("")
-                  
+        
     #This method takes in the envelopeData, finds the particular envelope, then sets the data
     def setEnvelopeInSpreadsheet(self, envelope, envelopeData, amountSpent):
         envelopeName = envelope.getName()
