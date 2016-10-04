@@ -1,5 +1,6 @@
 import unittest
 from GoogleSheetInterface import GoogleSheetInterface
+from GoogleSheetInterface import SheetNotFoundError
 import Utilities
 from googleapiclient.errors import HttpError
 
@@ -7,6 +8,7 @@ class TestGoogleSheetInterface(unittest.TestCase):
     UNIT_TEST_SPREADSHEET_ID = "1DVuL4Pf5KfblavC8X92p62oCU_cTxgfUBWloQcwsmsE"
     FIRST_SHEET_NAME = "My first sheet"
     SECOND_SHEET_NAME = "My second sheet"
+    THIRD_SHEET_NAME = "My third sheet"
     BAD_SHEET_NAME = "Non-existent sheet name"
     NAMED_RANGE = "MyNamedCell"
     BAD_NAMED_RANGE = "Non-existent named range"
@@ -63,11 +65,44 @@ class TestGoogleSheetInterface(unittest.TestCase):
         self.assertEqual(30, Utilities.getNumber(cellValueFinally))
         
     def test_copyPasteColumn(self):
-        self.fail("test_copyPasteColumn: need to implement test")
+        self.googleSheet.copyPasteColumn(self.THIRD_SHEET_NAME, 0, 1)
+        numRows = self.googleSheet.getNumRowsInWorksheet(self.THIRD_SHEET_NAME)
         
-    def test_insertColumn(self):
-        self.fail("test_insertColumn: need to implement test")
+        for i in range(1, numRows):
+            firstColumnCellAddress = self.googleSheet.getCellAddress(self.THIRD_SHEET_NAME, "A", i)
+            secondColumnCellAddress = self.googleSheet.getCellAddress(self.THIRD_SHEET_NAME, "B", i)
+            firstColumnValue = self.googleSheet.getCellValue(firstColumnCellAddress)
+            secondColumnValue = self.googleSheet.getCellValue(secondColumnCellAddress)
+            self.assertEqual(firstColumnValue, secondColumnValue)
+            
+        #Delete the column and insert it back in so it's ready for next time
+        self.googleSheet.deleteColumn(1, self.THIRD_SHEET_NAME)
+        self.googleSheet.insertColumn(1, self.THIRD_SHEET_NAME)
         
+        
+    def test_insertDeleteColumn(self):
+        #First check the values before the insert
+        cellBeforeInsert = self.googleSheet.getCellValue("A1", self.SECOND_SHEET_NAME)
+        cellAfterInsert = self.googleSheet.getCellValue("B1", self.SECOND_SHEET_NAME)
+        self.assertEqual("Column before insert", cellBeforeInsert)
+        self.assertEqual("Column after insert", cellAfterInsert)
+        
+        #Next insert the column and check the values
+        self.googleSheet.insertColumn(1, self.SECOND_SHEET_NAME)
+        cellBeforeInsert = self.googleSheet.getCellValue("A1", self.SECOND_SHEET_NAME)
+        cellInserted = self.googleSheet.getCellValue("B1", self.SECOND_SHEET_NAME)
+        cellAfterInsert = self.googleSheet.getCellValue("C1", self.SECOND_SHEET_NAME)
+        self.assertEqual("Column before insert", cellBeforeInsert)
+        self.assertEqual(None, cellInserted)
+        self.assertEqual("Column after insert", cellAfterInsert)
+        
+        #Finally delete the column and check that it's back to how it started
+        self.googleSheet.deleteColumn(1, self.SECOND_SHEET_NAME)
+        cellBeforeInsert = self.googleSheet.getCellValue("A1", self.SECOND_SHEET_NAME)
+        cellAfterInsert = self.googleSheet.getCellValue("B1", self.SECOND_SHEET_NAME)
+        self.assertEqual("Column before insert", cellBeforeInsert)
+        self.assertEqual("Column after insert", cellAfterInsert)
+          
     def test_addToCell(self):
         cellValueBefore = self.googleSheet.getCellValue("A4", self.FIRST_SHEET_NAME)
         self.assertEqual(40, Utilities.getNumber(cellValueBefore))
@@ -89,11 +124,17 @@ class TestGoogleSheetInterface(unittest.TestCase):
         secondWorksheetId = self.googleSheet.getWorksheetIdByName(self.SECOND_SHEET_NAME)
         self.assertEqual(830853517, secondWorksheetId)
 
+        #Test where worksheet is not found
+        with self.assertRaises(SheetNotFoundError):
+            self.googleSheet.getWorksheetIdByName(self.BAD_SHEET_NAME)
+
     def test_getNumRowsInWorksheet(self):
         numRows = self.googleSheet.getNumRowsInWorksheet(self.FIRST_SHEET_NAME)
         self.assertEqual(20, numRows)
         
-        #TODO: test where worksheet is not found
+        #Test where worksheet is not found
+        with self.assertRaises(SheetNotFoundError):
+            self.googleSheet.getNumRowsInWorksheet(self.BAD_SHEET_NAME)
         
 if __name__ == '__main__':
     unittest.main()

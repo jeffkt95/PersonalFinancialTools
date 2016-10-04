@@ -116,6 +116,25 @@ class GoogleSheetInterface:
         self.service.spreadsheets().batchUpdate(
             spreadsheetId=self.spreadsheetId, body=myBody).execute()
         
+    def deleteColumn(self, columnIndex, worksheetName):
+        worksheetId = self.getWorksheetIdByName(worksheetName)
+        
+        myBody = {u'requests': [
+        {
+            u'deleteDimension': {
+                u'range': {
+                    u'sheetId': str(worksheetId),
+                    u'dimension': u'COLUMNS',
+                    u'startIndex': str(columnIndex),
+                    u'endIndex': str(columnIndex + 1)
+                }
+            }
+        }
+        ]}
+
+        self.service.spreadsheets().batchUpdate(
+            spreadsheetId=self.spreadsheetId, body=myBody).execute()
+        
     def addToCell(self, cellAddress, amountToAdd):
         originalPotValue = self.getCellValue(cellAddress)
         
@@ -148,8 +167,7 @@ class GoogleSheetInterface:
             if title == worksheetName:
                 return theProperties.get('sheetId')
 
-        print("TODO: Need to throw error. '" + worksheetName + "' sheet not found.")
-        return -1
+        raise SheetNotFoundError(worksheetName, "getWorksheetIdByName, sheet '" + worksheetName + "' not found.")
     
     def getNumRowsInWorksheet(self, worksheetName):
         # https://developers.google.com/sheets/samples/sheet#determine_sheet_id_and_other_properties
@@ -165,8 +183,7 @@ class GoogleSheetInterface:
                 rowCount = gridProperties.get('rowCount')
                 return rowCount
 
-        print("TODO: Need to throw error. '" + worksheetName + "' sheet not found.")
-        return -1
+        raise SheetNotFoundError(worksheetName, "getNumRowsInWorksheet, sheet '" + worksheetName + "' not found.")
     
     def get_credentials(self):
         """Gets valid user credentials from storage.
@@ -196,3 +213,15 @@ class GoogleSheetInterface:
             #    credentials = tools.run(flow, store)
             print('Storing credentials to ' + credential_path)
         return credentials
+        
+class SheetNotFoundError(Exception):
+    """Exception raised when a sheet is not found.
+
+    Attributes:
+        sheetName -- Name of sheet not found
+        message -- explanation of the error
+    """
+
+    def __init__(self, sheetName, message):
+        self.sheetName = sheetName
+        self.message = message
