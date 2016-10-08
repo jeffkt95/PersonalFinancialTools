@@ -51,7 +51,28 @@ class GoogleSheetsTable():
         rowValueCellAddress = self.mParentSpreadsheet.getCellAddress(self.mTableSheetName, 
                                                                     self.mTableValuesColumn, rowIndex)
         self.mParentSpreadsheet.addToCell(rowValueCellAddress, amountToAdd)
+    
+    def getTableValue(self, key):
+        tableKeys = self.getTableKeys()
         
+        rowIndex = self.mTableStartRow
+        foundRow = False
+        #Find the pot row using the name
+        for tableKey in tableKeys:
+            if tableKey[0] == key:
+                foundRow = True
+                break
+            
+            rowIndex += 1
+        
+        if (foundRow == False):
+            print("Couldn't find " + key + " in spreadsheet. TODO: throw error")
+            return
+            
+        rowValueCellAddress = self.mParentSpreadsheet.getCellAddress(self.mTableSheetName, 
+                                                                    self.mTableValuesColumn, rowIndex)
+        return self.mParentSpreadsheet.getCellValue(rowValueCellAddress)
+    
     def getKeysList(self):
         keysList = []
 

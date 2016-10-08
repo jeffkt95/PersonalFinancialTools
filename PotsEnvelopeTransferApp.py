@@ -4,6 +4,7 @@ from EnvelopesSpreadsheet import EnvelopesSpreadsheet
 from PotsSpreadsheet import PotsSpreadsheet
 from TransferParameters import TransferParameters
 from TransferProcessor import TransferProcessor
+from ToolTip import ToolTip
 
 class PotsEnvelopeTransferApp:
     envelopeLastRow = 0
@@ -200,17 +201,24 @@ class PotsEnvelopeTransferApp:
         potOneAmount = Entry(self.potFrame, textvariable=potVariable)
         #Pad on the right to have space between the pots/envelopes column.
         potOneAmount.grid(row=self.potLastRow, column=1, padx=(0, 6))
+
+        #Create tooltip for Entry
+        potEntryTooltip = ToolTip(potOneAmount, "Enter amount to add/remove")
         
         self.potLastRow = self.potLastRow + 1
         
-        potWidgets = DoubleValueWidgets(potOneOption, potOneVariable, potOneAmount, potVariable)
+        potWidgets = DoubleValueWidgets(potOneOption, potOneVariable, potOneAmount, potVariable, potEntryTooltip)
         self.potsWidgets.append(potWidgets)
+
+        potOneVariable.trace("w", lambda name, index, mode,
+                    potOneVariable=potOneVariable: self.potSelectionChanged(potWidgets))
+        self.potSelectionChanged(potWidgets)
 
         self.setRemovePotButtonState()
         self.potAmountChanged(None)
-
-        return potWidgets
         
+        return potWidgets
+    
     def addEnvelope(self):
         envelopeOneVariable = StringVar(self.master)
         envelopeOneVariable.set(self.envelopeList[0])
@@ -224,16 +232,37 @@ class PotsEnvelopeTransferApp:
         envelopeOneAmount = Entry(self.envelopeFrame, textvariable=envelopeVariable)
         envelopeOneAmount.grid(row=self.envelopeLastRow, column=1)
         
+        #Create tooltip for Entry
+        envelopeEntryTooltip = ToolTip(envelopeOneAmount, "Enter amount to add/remove")
+
         self.envelopeLastRow = self.envelopeLastRow + 1        
         
-        envelopeWidgets = DoubleValueWidgets(envelopeOneOption, envelopeOneVariable, envelopeOneAmount, envelopeVariable)
+        envelopeWidgets = DoubleValueWidgets(envelopeOneOption, envelopeOneVariable, envelopeOneAmount, envelopeVariable, envelopeEntryTooltip)
         self.envelopesWidgets.append(envelopeWidgets)
         
+        envelopeOneVariable.trace("w", lambda name, index, mode,
+                    envelopeOneVariable=envelopeOneVariable: self.envelopeSelectionChanged(envelopeWidgets))
+        self.envelopeSelectionChanged(envelopeWidgets)
+
         self.setRemoveEnvelopeButtonState()
         self.envelopeAmountChanged(None)
 
         return envelopeWidgets
+        
+    def potSelectionChanged(self, potWidgets):
+        currentPotAmount = self.potsSpreadsheet.getPotsTable().getTableValue(potWidgets.getSelectedName())
+        if (currentPotAmount == None):
+            currentPotAmount = 0
+            
+        potWidgets.setEntryTooltip("Current pot value: " + str(currentPotAmount))
 
+    def envelopeSelectionChanged(self, envelopeWidgets):
+        currentEnvelopeAmount = self.envelopesSpreadsheet.getEnvelopesTable().getTableValue(envelopeWidgets.getSelectedName())
+        if (currentEnvelopeAmount == None):
+            currentEnvelopeAmount = 0
+            
+        envelopeWidgets.setEntryTooltip("Current envelope value: " + str(currentEnvelopeAmount))
+    
     def getEnvelopesTotal(self):
         sum = 0
         for doubleValueWidgets in self.envelopesWidgets:
