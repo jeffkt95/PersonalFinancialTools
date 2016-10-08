@@ -122,7 +122,7 @@ to determine the table variables from named ranges.
   * Handle rounding error. Round to nearest cent, particularly on the total check
   * Unit testing! Create a test spreadsheet for all the spreadsheet and table functions. Write some unit tests to get and set values in it.
     * DONE Set up python unit testing framework: https://docs.python.org/3.5/library/unittest.html
-    * Unit test GoogleSheetsTable
-  * How about showing what's in the envelope/pot currently (before the transfer) in the UI. Could just show it with a tooltip. Otherwise have to find space for it on UI.
+    * STARTED, NOT FINISHED. Unit test GoogleSheetsTable
+  * NEEDS TESTING, but done. How about showing what's in the envelope/pot currently (before the transfer) in the UI. Could just show it with a tooltip. Otherwise have to find space for it on UI.
     * Need to get the value on the combo box event
     * then need to associate it with the text box
