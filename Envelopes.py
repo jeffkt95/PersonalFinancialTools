@@ -66,7 +66,7 @@ class Envelopes:
                 if Utilities.isDate(tokens[0]):
                     #skip it. This line is an individual transaction. Not interested in that
                     continue
-                elif tokens[0] == "OVERALL TOTAL":
+                elif tokens[0] == "OVERALL" and tokens[1] == "TOTAL":
                     #You're done. Break out
                     break;
                 else:
