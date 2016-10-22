@@ -15,9 +15,7 @@ class DoubleValueWidgets:
         return self.nameVariable.get()
         
     def setEntryTooltip(self, tooltip):
-        print("todo, check that the tooltip isn't None")
         self.entryTooltip.changeTooltipMessage(tooltip)
-        
         
     def removeWidgets(self):
         self.option.grid_remove()
