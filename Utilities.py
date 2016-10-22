@@ -22,7 +22,9 @@ def getNumber(value):
         
 def is_number(s):
     try:
-        float(s)
+        #Remove commas. Comma delimiters screw up casting as float.
+        strWithoutCommas = s.replace(",", "")
+        float(strWithoutCommas)
         return True
     except ValueError:
         return False
