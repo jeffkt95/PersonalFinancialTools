@@ -15,6 +15,10 @@ class TransferProcessor:
         self.processEnvelopes()
         
     def processPots(self):
+        #If there are no pots, nothing to do.
+        if (len(self.transferParameters.pots) == 0):
+            return
+
         #If going from pots to envelopes, then pots values should be multiplied by -1, so you're subtracting the amount
         if (self.transferParameters.getTransferTo() == TransferParameters.POTS):
             factor = 1
@@ -31,6 +35,10 @@ class TransferProcessor:
             self.mPotsTable.addToTableRow(pot.getName(), pot.getAmountSpent() * factor)
     
     def processEnvelopes(self):
+        #If there are no envelopes, nothing to do.
+        if (len(self.transferParameters.envelopes) == 0):
+            return
+            
         #If going from pots to envelopes, then envelope values should be multiplied by 1, so you're adding the amount
         if (self.transferParameters.getTransferTo() == TransferParameters.ENVELOPES):
             factor = 1
