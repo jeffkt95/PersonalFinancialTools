@@ -1,4 +1,13 @@
 from TransferParameters import TransferParameters
+from EmailMessage import EmailMessage
+from tkinter import *
+import tkinter
+import tkinter.simpledialog
+
+smtpServer = "smtp.gmail.com"
+smtpUsername = "jeffkt95@gmail.com"
+fromAddress = "jeffkt95@gmail.com"
+toAddress = "jeffkt95@gmail.com"
 
 #This class takes in all the data required to do the transfer. The class also has the logic
 # to actually perform the transfer.
@@ -13,6 +22,7 @@ class TransferProcessor:
     def processTransfer(self):
         self.processPots()
         self.processEnvelopes()
+        self.documentWithEmail()
         
     def processPots(self):
         #If there are no pots, nothing to do.
@@ -50,3 +60,10 @@ class TransferProcessor:
         for envelope in self.transferParameters.envelopes:
             self.mEnvelopesTable.addToTableRow(envelope.getName(), envelope.getAmountSpent() * factor)
                         
+    def documentWithEmail(self):
+        password = tkinter.simpledialog.askstring("Password", "Enter email server password\nfor user " + smtpUsername + ": ", show='*')
+        emailMessage = EmailMessage(smtpServer, fromAddress, "Envelopes - Pots transfer executed", smtpUsername, password)
+        
+        #TODO: compose email body with transfer details
+        emailMessage.addPlainTextBody("Here's the message body")
+        emailMessage.send(toAddress, toAddress)
