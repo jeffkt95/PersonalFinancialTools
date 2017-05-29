@@ -60,10 +60,39 @@ class TransferProcessor:
         for envelope in self.transferParameters.envelopes:
             self.mEnvelopesTable.addToTableRow(envelope.getName(), envelope.getAmountSpent() * factor)
                         
-    def documentWithEmail(self):
-        password = tkinter.simpledialog.askstring("Password", "Enter email server password\nfor user " + smtpUsername + ": ", show='*')
-        emailMessage = EmailMessage(smtpServer, fromAddress, "Envelopes - Pots transfer executed", smtpUsername, password)
+    def documentWithEmail(self):        
+        messageBody = "Total transfer amount: " + str(self.transferParameters.getTransferAmount())
         
-        #TODO: compose email body with transfer details
-        emailMessage.addPlainTextBody("Here's the message body")
+        #If there are no pots, nothing to do.
+        if (len(self.transferParameters.pots) == 0):
+            messageBody = messageBody + "\n\nThis transfer does affect pots."
+        if (len(self.transferParameters.envelopes) == 0):
+            messageBody = messageBody + "\n\nThis transfer does affect envelopes."
+
+        if (self.transferParameters.getTransferTo() == TransferParameters.POTS):
+            subject = "Envelopes -> Pots transfer executed"
+            potsHeader = "Money transferred into pots:"
+            envelopesHeader = "Money transferred from envelopes:"
+        else:
+            subject = "Pots -> Envelopes transfer executed"
+            potsHeader = "Money transferred from pots:"
+            envelopesHeader = "Money transferred into envelopes:"
+
+        messageBody = messageBody + "\n\n" + potsHeader
+        for pot in self.transferParameters.pots:
+            messageBody = messageBody + "\n$" + str(pot.getAmountSpent()) + "     " + pot.getName()
+
+
+        messageBody = messageBody + "\n\n" + envelopesHeader
+        for envelope in self.transferParameters.envelopes:
+            messageBody = messageBody + "\n$" + str(envelope.getAmountSpent()) + "     " + envelope.getName()
+
+        messageBody = messageBody + "\n\nTransfer note:"
+        messageBody = messageBody + "\n" + self.transferParameters.getPotsNote()
+        
+        messageBody = messageBody + "\n\nHave a nice day!"
+        
+        password = tkinter.simpledialog.askstring("Password", "Enter email server password\nfor user " + smtpUsername + ": ", show='*')
+        emailMessage = EmailMessage(smtpServer, fromAddress, subject, smtpUsername, password)
+        emailMessage.addPlainTextBody(messageBody)
         emailMessage.send(toAddress, toAddress)

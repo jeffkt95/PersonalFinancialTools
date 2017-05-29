@@ -175,7 +175,7 @@ class PotsEnvelopeTransferApp:
         okButton.grid(row=mainFrameRow, column=0)
         self.okButton = okButton
         
-        cancelButton = Button(frame, text="Cancel", command=self.closeWindow)
+        cancelButton = Button(frame, text="Close", command=self.closeWindow)
         cancelButton.grid(row=mainFrameRow, column=1)
         
         self.setReadyForExecuteState()
