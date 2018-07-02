@@ -15,7 +15,7 @@ class EnvelopesSpreadsheet(GoogleSheetInterface):
     TOTAL_CELL = "B1"
 
     def __init__(self):
-        GoogleSheetInterface.__init__(self, self.TEST_SPREADSHEET_ID)
+        GoogleSheetInterface.__init__(self, self.REAL_SPREADSHEET_ID)
         self.mEnvelopesTable = GoogleSheetsTable(self, "A", "B", 3, 32, self.SHEET_NAME)
         
     def getEnvelopesTable(self):
