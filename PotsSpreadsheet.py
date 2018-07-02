@@ -12,7 +12,7 @@ class PotsSpreadsheet(GoogleSheetInterface):
     DATE_CELL = "B1"
     
     def __init__(self):
-        GoogleSheetInterface.__init__(self, self.TEST_SPREADSHEET_ID)
+        GoogleSheetInterface.__init__(self, self.REAL_SPREADSHEET_ID)
         self.mPotsTable = GoogleSheetsTable(self, "A", "B", 12, 33, self.SHEET_NAME)
 
     def getPotsTable(self):
@@ -27,7 +27,8 @@ class PotsSpreadsheet(GoogleSheetInterface):
         
     def setPotsNote(self, note):
         if (note is not None):
-            lastRow = self.getNumRowsInWorksheet(self.SHEET_NAME)
+            # Subtracting 3, as I have some stuff below the note row now
+            lastRow = self.getNumRowsInWorksheet(self.SHEET_NAME) - 3
             noteCell = "B" + str(lastRow)
             self.setCellValue(noteCell, note, self.SHEET_NAME)
         
