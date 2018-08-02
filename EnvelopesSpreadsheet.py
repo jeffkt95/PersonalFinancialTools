@@ -16,7 +16,7 @@ class EnvelopesSpreadsheet(GoogleSheetInterface):
 
     def __init__(self):
         GoogleSheetInterface.__init__(self, self.REAL_SPREADSHEET_ID)
-        self.mEnvelopesTable = GoogleSheetsTable(self, "A", "B", 3, 32, self.SHEET_NAME)
+        self.mEnvelopesTable = GoogleSheetsTable(self, "A", "B", 3, 32, self.SHEET_NAME, "C")
         
     def getEnvelopesTable(self):
         return self.mEnvelopesTable

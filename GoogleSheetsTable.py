@@ -5,16 +5,19 @@ class GoogleSheetsTable():
     mTableStartRow = -1
     mTableEndRow = -1
     mTableSheetName = ""
-    #This variable will contain nothing until you load the data. Check it's value.
+    #This variable will contain nothing until you load the data. Check its value.
     mTableKeys = None
 
-    def __init__(self, parentSpreadsheet, tableKeysColumn, tableValuesColumn, tableStartRow, tableEndRow, tableSheetName):
+    #tableValuesColumn2 allows you to have two values for every key. Value and Value2
+    def __init__(self, parentSpreadsheet, tableKeysColumn, tableValuesColumn, tableStartRow, tableEndRow, tableSheetName, tableValuesColumn2 = None):
         self.mParentSpreadsheet = parentSpreadsheet
         self.mTableKeysColumn = tableKeysColumn
         self.mTableValuesColumn = tableValuesColumn
         self.mTableStartRow = tableStartRow
         self.mTableEndRow = tableEndRow
         self.mTableSheetName = tableSheetName
+        #Note that mTableValuesColumn2 could be None. 
+        self.mTableValuesColumn2 = tableValuesColumn2
         
     def getTableKeys(self):
         if (self.mTableKeys != None):
@@ -71,6 +74,31 @@ class GoogleSheetsTable():
             
         rowValueCellAddress = self.mParentSpreadsheet.getCellAddress(self.mTableSheetName, 
                                                                     self.mTableValuesColumn, rowIndex)
+        return self.mParentSpreadsheet.getCellValue(rowValueCellAddress)
+    
+    def getTableValue2(self, key):
+        if (self.mTableValuesColumn2 is None):
+            print("Tables does not have a second value column. TODO: throw error")
+            return None
+
+        tableKeys = self.getTableKeys()
+        
+        rowIndex = self.mTableStartRow
+        foundRow = False
+        #Find the pot row using the name
+        for tableKey in tableKeys:
+            if tableKey[0] == key:
+                foundRow = True
+                break
+            
+            rowIndex += 1
+        
+        if (foundRow == False):
+            print("Couldn't find " + key + " in spreadsheet. TODO: throw error")
+            return
+            
+        rowValueCellAddress = self.mParentSpreadsheet.getCellAddress(self.mTableSheetName, 
+                                                                    self.mTableValuesColumn2, rowIndex)
         return self.mParentSpreadsheet.getCellValue(rowValueCellAddress)
     
     def getKeysList(self):
