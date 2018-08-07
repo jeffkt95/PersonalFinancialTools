@@ -27,8 +27,8 @@ class PotsSpreadsheet(GoogleSheetInterface):
         
     def setPotsNote(self, note):
         if (note is not None):
-            # Subtracting 3, as I have some stuff below the note row now
-            lastRow = self.getNumRowsInWorksheet(self.SHEET_NAME) - 3
+            # Subtracting rows from bottom, as I have some stuff below the note row now
+            lastRow = self.getNumRowsInWorksheet(self.SHEET_NAME) - 5
             noteCell = "B" + str(lastRow)
             self.setCellValue(noteCell, note, self.SHEET_NAME)
         

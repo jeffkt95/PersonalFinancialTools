@@ -71,3 +71,8 @@ def print_data(values):
             # Print columns A, B, C, D, E
             if (len(row) >= 5):
                 print('%s, %s, %s, %s, %s' % (row[0], row[1], row[2], row[3], row[4]))
+
+def formatAsDollars(value):
+    dollarsCents = "{:.2f}".format(value)
+    return "$" + dollarsCents
+    

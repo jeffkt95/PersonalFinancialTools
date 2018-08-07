@@ -3,6 +3,7 @@ from EmailMessage import EmailMessage
 from tkinter import *
 import tkinter
 import tkinter.simpledialog
+import Utilities
 
 smtpServer = "smtp.gmail.com"
 smtpUsername = "jeffkt95@gmail.com"
@@ -61,7 +62,7 @@ class TransferProcessor:
             self.mEnvelopesTable.addToTableRow(envelope.getName(), envelope.getAmountSpent() * factor)
                         
     def documentWithEmail(self):        
-        messageBody = "Total transfer amount: " + str(self.transferParameters.getTransferAmount())
+        messageBody = "Total transfer amount: " + Utilities.formatAsDollars(self.transferParameters.getTransferAmount())
         
         #If there are no pots, nothing to do.
         if (len(self.transferParameters.pots) == 0):
@@ -80,12 +81,12 @@ class TransferProcessor:
 
         messageBody = messageBody + "\n\n" + potsHeader
         for pot in self.transferParameters.pots:
-            messageBody = messageBody + "\n$" + str(pot.getAmountSpent()) + "     " + pot.getName()
+            messageBody = messageBody + "\n" + Utilities.formatAsDollars(pot.getAmountSpent()) + "     " + pot.getName()
 
 
         messageBody = messageBody + "\n\n" + envelopesHeader
         for envelope in self.transferParameters.envelopes:
-            messageBody = messageBody + "\n$" + str(envelope.getAmountSpent()) + "     " + envelope.getName()
+            messageBody = messageBody + "\n" + Utilities.formatAsDollars(envelope.getAmountSpent()) + "     " + envelope.getName()
 
         messageBody = messageBody + "\n\nTransfer note:"
         messageBody = messageBody + "\n" + self.transferParameters.getPotsNote()
