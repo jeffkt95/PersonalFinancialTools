@@ -9,7 +9,7 @@ import Utilities
 smtpServer = "smtp.gmail.com"
 smtpUsername = "jeffkt95@gmail.com"
 fromAddress = "jeffkt95@gmail.com"
-toAddress = "jeffkt95@gmail.com"
+toAddress = "jeffkt@alum.mit.edu"
 
 #This class takes in all the data required to do the transfer. The class also has the logic
 # to actually perform the transfer.
