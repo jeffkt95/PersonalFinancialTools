@@ -265,7 +265,9 @@ class PotsEnvelopeTransferApp:
         if (currentEnvelopeSpent == None):
             currentEnvelopeSpent = 0
             
-        envelopeWidgets.setEntryTooltip("Envelope amount: " + str(currentEnvelopeAmount) + "\nCurrent envelope spent: " + str(currentEnvelopeSpent))
+        amountLeft = float(currentEnvelopeAmount) - float(currentEnvelopeSpent)
+          
+        envelopeWidgets.setEntryTooltip("Envelope amount: " + str(currentEnvelopeAmount) + "\nCurrent envelope spent: " + str(currentEnvelopeSpent) + "\nAmount left: " + str(amountLeft))
     
     def getEnvelopesTotal(self):
         sum = 0
