@@ -1,5 +1,6 @@
 from TransferParameters import TransferParameters
 from EmailMessage import EmailMessage
+from Passwords import Passwords
 from tkinter import *
 import tkinter
 import tkinter.simpledialog
@@ -93,7 +94,9 @@ class TransferProcessor:
         
         messageBody = messageBody + "\n\nHave a nice day!"
         
-        password = tkinter.simpledialog.askstring("Password", "Enter email server password\nfor user " + smtpUsername + ": ", show='*')
+        #password = tkinter.simpledialog.askstring("Password", "Enter email server password\nfor user " + smtpUsername + ": ", show='*')
+        passwords = Passwords()
+        password = passwords.retrievePassword(smtpUsername)
         emailMessage = EmailMessage(smtpServer, fromAddress, subject, smtpUsername, password)
         emailMessage.addPlainTextBody(messageBody)
         emailMessage.send(toAddress, toAddress)
