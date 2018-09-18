@@ -5,6 +5,7 @@ from PotsSpreadsheet import PotsSpreadsheet
 from TransferParameters import TransferParameters
 from TransferProcessor import TransferProcessor
 from ToolTip import ToolTip
+from tkinter import messagebox
 
 class PotsEnvelopeTransferApp:
     envelopeLastRow = 0
@@ -331,6 +332,8 @@ class PotsEnvelopeTransferApp:
         #After you process, clear the transfer classes for a fresh start next time.
         transferParameters = None
         transferProcessor = None
+        
+        messagebox.showinfo("Done!", "Transfer complete in Pots and Envelopes spreadsheets.\n\nDon't forget to transfer funds using the bank website and enter it in Quicken.")
 
     #This method sets color and state for different widgets based on whether or not the 
     #transfer is ready for execution.
